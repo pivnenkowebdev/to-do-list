@@ -1,0 +1,148 @@
+@import './reset.css';
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600&display=swap');
+
+html,body{
+background-color: rgb(210, 238, 238);
+font-family: 'Kanit', sans-serif;
+}
+
+.wrapper{
+
+}
+
+.to-do {
+
+}
+
+.container{
+width: 900px;
+margin: 0 auto;
+}
+
+.header {
+padding-top: 40px;
+padding-bottom: 40px;
+background-color: brown;
+margin-bottom: 20px; 
+}
+
+.to-do__item {
+margin-bottom: 20px;
+}
+
+.to-do__item:last-child{
+   margin-bottom: 0;
+}
+
+.to-do__heading {
+   font-size: 60px;
+   font-weight: 600;
+   color: rgb(247, 242, 242);
+}
+
+.to-do__search {
+   padding-left: 10px;
+   padding-right: 10px;
+   height: 40px;
+   width: 600px;
+   font-size: 20px;
+   border-radius: 5px;
+}
+
+.main {
+   
+}
+
+.add-note {
+   
+}
+
+.add-note__input {
+   padding-left: 10px;
+   padding-right: 10px;
+   height: 40px;
+   width: 400px;
+   border-radius: 5px 0px 0px 5px;
+   font-size: 20px;
+}
+
+.add-note .add-btn {
+   padding-left: 20px;
+   padding-right: 20px;
+   border-radius: 0px 5px 5px 0px;
+   height: 40px;
+   font-size: 20px;
+   background-color: brown;  
+   color: rgb(247, 242, 242);
+   transition: background-color 500ms, color 500ms;
+}
+
+.list-notes {
+   height: 600px;
+   border: 1px solid gray;
+   border-top: none;
+   overflow: auto;
+   padding-left: 20px;
+   padding-right: 20px;
+   padding-bottom: 20px;
+}
+
+.list-notes__item {
+   display: flex;
+   column-gap: 5px;
+   margin-bottom: 15px;
+}
+
+.list-notes__item:last-child{
+   margin-bottom: 0;
+}
+
+.list-notes__value {
+   width: 90%;
+   height: 50px;
+   background-color: white;
+   overflow: auto;
+   padding-left: 15px;
+   padding-right: 15px;
+   border-radius:5px 0px 0px 5px;
+}
+
+.list-notes__value::-webkit-scrollbar,
+.list-notes::-webkit-scrollbar {
+   width: 6px; 
+ }
+
+ .list-notes__value::-webkit-scrollbar-thumb,
+ .list-notes::-webkit-scrollbar-thumb  {
+   background-color: rgba(230, 127, 113, 0.5);  
+}
+   
+.list-notes__value::-webkit-scrollbar-thumb:hover,
+.list-notes::-webkit-scrollbar-thumb:hover{
+   background-color: rgba(199, 50, 30, 0.822);    
+}
+
+
+
+.list-notes .delete-btn {
+   padding-left: 20px;
+   padding-right: 20px;
+   border-radius: 0px 5px 5px 0px;
+   height: 50px;
+   font-size: 20px;
+   background-color: brown;  
+   color: rgb(247, 242, 242);
+   transition: background-color 500ms, color 500ms;
+}
+
+.list-notes .delete-btn:hover,
+.add-note .add-btn:hover{
+   background-color: rgb(233, 33, 33);
+   color: white;
+   transition: background-color 500ms, color 500ms;
+}
+
+.list-notes .delete-btn:active,
+.add-note .add-btn:active{
+   background-color: rgb(99, 93, 93);
+}

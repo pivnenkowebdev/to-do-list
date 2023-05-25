@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-   <link rel="stylesheet" href="../lesson/css/style.css">
+   <link rel="stylesheet" href="./css/style.css">
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,37 @@
 </head>
 
 <body>
+   <div class="wrapper">
+      <form action="" class="to-do" id="to-do">
 
+         <div class="header">
+            <div class="container">
+               <div class="to-do__item">
+                  <p class="to-do__heading">To-do</p>
+                  <input type="search" class="to-do__search" placeholder="Search" >
+               </div>
+           </div>
+         </div>
+         
+         <div class="main">
+              <div class="container">
+                  <div class="to-do__item">
+                     <div class="add-note">
+                        <input type="text" class="add-note__input" placeholder="Add note" id="new-note-input">
+                        <input type="submit" class="add-btn" value="Add" id="add-btn">
+                     </div>
+                  </div>
+   
+                  <div class="to-do__item">
+                        <ul class="list-notes" id="list-notes">
+                          
+                        </ul>
+                  </div>
+              </div>
+         </div>
+
+      </form>
+   </div>
    <script src="./js/main.js"></script>
 </body>
 
