@@ -6,14 +6,6 @@ background-color: rgb(210, 238, 238);
 font-family: 'Kanit', sans-serif;
 }
 
-.wrapper{
-
-}
-
-.to-do {
-
-}
-
 .container{
 width: 900px;
 margin: 0 auto;
@@ -47,14 +39,6 @@ margin-bottom: 20px;
    width: 600px;
    font-size: 20px;
    border-radius: 5px;
-}
-
-.main {
-   
-}
-
-.add-note {
-   
 }
 
 .add-note__input {
@@ -101,7 +85,7 @@ margin-bottom: 20px;
    width: 90%;
    height: 50px;
    background-color: white;
-   overflow: auto;
+   overflow:auto;
    padding-left: 15px;
    padding-right: 15px;
    border-radius:5px 0px 0px 5px;

@@ -1,8 +1,10 @@
 const toDo = document.querySelector('#to-do');
 const listNotes = toDo.querySelector('#list-notes');
+const inputSearch = toDo.querySelector('#search');
 
 toDo.addEventListener('submit',renderNote);
 listNotes.addEventListener('click', removeNote);
+inputSearch.addEventListener('keyup', filterNotes);
 
 function renderNote(e){
    e.preventDefault();
@@ -22,10 +24,33 @@ function renderNote(e){
 function removeNote(e){
    if(e.target.dataset.action == 'delete'){
 
-      if( confirm('Delete this note?')){
          e.target.parentNode.remove();
-      }
 
    }
 }
-  
+
+function filterNotes(e){
+
+   let searchValue = e.target.value.toLowerCase();
+
+   const noteItem = listNotes.querySelectorAll('.list-notes__value');
+
+   
+   noteItem.forEach(function(item){
+
+      const itemValue = item.textContent.toLowerCase();
+      
+      if(itemValue.indexOf(searchValue) != -1 ){
+
+         item.closest('.list-notes__item').style.display = 'flex';
+         
+      }else{
+         
+         item.closest('.list-notes__item').style.display = 'none';
+
+      }
+         
+
+   })
+
+}
