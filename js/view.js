@@ -1,56 +1,56 @@
+export default class View{
 
-// render all notes
-function renderAllNotes(){
-   allNotes.forEach((note) => {
-      const newNote = `<li class="list-notes__item">
-        <p class="list-notes__value">${note}</p>
-        <button class="delete-btn" data-action='delete'>Delete</button>
-      </li>`;
-      listNotes.insertAdjacentHTML('beforeend', newNote);
-    });
-}
+   constructor(allNotes){
+      allNotes.forEach(note => {
+         this.renderNotes(note);
+      });
+   }
 
-// render the new note
-function renderNewNote(e){
-   e.preventDefault();
+   elementsControll = {
+      form: document.querySelector('#to-do'),
+      listNotes: document.querySelector('#list-notes'),
+      inputSearch: document.querySelector('#search'),
+      inputValue: document.querySelector('#newNoteInput'),
+   }
 
-   if(inputValue.value.length > 0){
+   renderNotes(note){
 
-      const newNote = `<li class="list-notes__item">
-      <p class="list-notes__value">${inputValue.value}</p>
+      const newNote = `
+      <li class="list-notes__item">
+      <p class="list-notes__value">${note}</p>
       <button class="delete-btn" data-action='delete'>Delete</button>
-      </li>`
+      </li>
+      `;
 
-      addItemInListNotes();
+      this.elementsControll.listNotes.insertAdjacentHTML('beforeend', newNote);
 
-      inputValue.value = '';
-      listNotes.insertAdjacentHTML('beforeend', newNote);
-      
-   }else{
-      inputValue.style.border = '2px solid red';
    }
 
-}
+   clearInput(){
+      this.elementsControll.inputValue.value = '';
+   }
 
-// remove the note
-function removeNoteFromRender(e){
-   if(e.target.dataset.action == 'delete'){
-      removeNoteFromList(e);
-      e.target.parentNode.remove();
+   alertInput(){
+      this.elementsControll.inputValue.style.border = '2px solid red';
+   }
+   
+   acessInput(){
+      this.elementsControll.inputValue.style.border = '2px solid transparent';
+   }
+   
+   findNotes(noteItem, searchValue){
+      noteItem.forEach(function(item){
+         const itemValue = item.textContent.toLowerCase();
+         if(itemValue.indexOf(searchValue) != -1 ){
+            item.closest('.list-notes__item').style.display = 'flex';
+         }else{
+            item.closest('.list-notes__item').style.display = 'none';
+         }
+      })
+   }
+
+   deleteCurrentNote(element){
+      element.remove();
    }
 }
 
-// filter notes
-function filterNotes(e){
-   let searchValue = e.target.value.toLowerCase();
-   const noteItem = listNotes.querySelectorAll('.list-notes__value');
-
-   noteItem.forEach(function(item){
-      const itemValue = item.textContent.toLowerCase();
-      if(itemValue.indexOf(searchValue) != -1 ){
-         item.closest('.list-notes__item').style.display = 'flex';
-      }else{
-         item.closest('.list-notes__item').style.display = 'none';
-      }
-   })
-}

@@ -1,22 +1,34 @@
+export default class Model{
 
-// get list notes or create it
-const allNotes = JSON.parse(localStorage.getItem('listNotes')) || [];
-
-if(allNotes.length > 0){
-   renderAllNotes();
-}
-
-// removeNoteFromList
-function removeNoteFromList(e){
-   allNotes.splice(allNotes.indexOf(e.target.previousElementSibling.textContent),1)
-   localStorage.setItem('listNotes',JSON.stringify(allNotes));
-}
-
-// add note in list of notes
-function addItemInListNotes(){
-
-   if(allNotes){
-      allNotes.push(inputValue.value);
-      localStorage.setItem('listNotes',JSON.stringify(allNotes));
+   constructor(){
+      this.allNotes = [];
+      this.loadFromStorage();
    }
+
+   loadFromStorage(){
+      const data = localStorage.getItem('listNotes');
+      if(data){
+         this.allNotes = JSON.parse(data);
+      }
+   }
+
+   saveLocalStorage(){
+      localStorage.setItem('listNotes',JSON.stringify(this.allNotes));
+   }
+
+   addNote(text){
+      this.allNotes.push(text);
+      this.saveLocalStorage();
+      return text;
+   }
+
+   removeNoteFromList(index) {
+      const noteIndex = this.allNotes.indexOf(index);
+      if (noteIndex !== -1) {
+         this.allNotes.splice(noteIndex, 1);
+         this.saveLocalStorage();
+      }
+   }
+
 }
+
