@@ -8999,6 +8999,31 @@ _global["default"]._babelPolyfill = true;
 (() => {
 "use strict";
 
+;// CONCATENATED MODULE: ./src/header/params/header-params.js
+const header_params_headerParams = {
+  tagName: 'header',
+  classList: ['header', 'otherClass']
+};
+
+;// CONCATENATED MODULE: ./src/header/header-view.js
+
+
+const header_view_createHeader = () => {
+  const headerElement = createElement(headerParams);
+  return headerElement;
+};
+/* harmony default export */ const header_view = ((/* unused pure expression or super */ null && (header_view_createHeader)));
+;// CONCATENATED MODULE: ./src/utilities/init.js
+
+const initApp = () => {
+  const containerApp = document.body;
+  const header = createHeader();
+  containerApp.insertAdjacentElement('beforeend', header);
+};
+/* harmony default export */ const init = ((/* unused pure expression or super */ null && (initApp)));
+;// CONCATENATED MODULE: ./src/index.js
+
+
 })();
 
 /******/ })()

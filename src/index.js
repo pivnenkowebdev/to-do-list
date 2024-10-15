@@ -1,2 +1,4 @@
 import "./index.html";
-import "./test.js";
+import initApp from "./utilities/init.js";
+
+initApp();
