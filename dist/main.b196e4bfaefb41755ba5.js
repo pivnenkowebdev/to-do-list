@@ -8999,31 +8999,53 @@ _global["default"]._babelPolyfill = true;
 (() => {
 "use strict";
 
+;// CONCATENATED MODULE: ./src/utilities/creator.js
+const createElement = elementParams => {
+  const tagElement = document.createElement(elementParams.tagName);
+
+  // if (elementParams.classList && elementParams.length > 0) {
+  tagElement.classList.add(...elementParams.classList);
+  // }
+
+  if (elementParams.text) {
+    tagElement.innerText = elementParams.text;
+  }
+  return tagElement;
+};
+/* harmony default export */ const creator = (createElement);
 ;// CONCATENATED MODULE: ./src/header/params/header-params.js
-const header_params_headerParams = {
-  tagName: 'header',
-  classList: ['header', 'otherClass']
+const headerParams = {
+  tagName: "header",
+  classList: ["header"]
+};
+const mainTitleParams = {
+  tagName: 'h1',
+  classList: ['text-cyan-500'],
+  text: 'to-do'
 };
 
 ;// CONCATENATED MODULE: ./src/header/header-view.js
 
 
-const header_view_createHeader = () => {
-  const headerElement = createElement(headerParams);
+const createHeader = () => {
+  const headerElement = creator(headerParams);
+  const mainTitle = creator(mainTitleParams);
+  headerElement.insertAdjacentElement('beforeend', mainTitle);
   return headerElement;
 };
-/* harmony default export */ const header_view = ((/* unused pure expression or super */ null && (header_view_createHeader)));
+/* harmony default export */ const header_view = (createHeader);
 ;// CONCATENATED MODULE: ./src/utilities/init.js
 
 const initApp = () => {
   const containerApp = document.body;
-  const header = createHeader();
-  containerApp.insertAdjacentElement('beforeend', header);
+  const header = header_view();
+  containerApp.insertAdjacentElement("beforeend", header);
 };
-/* harmony default export */ const init = ((/* unused pure expression or super */ null && (initApp)));
+/* harmony default export */ const init = (initApp);
 ;// CONCATENATED MODULE: ./src/index.js
 
 
+init();
 })();
 
 /******/ })()

@@ -1,6 +1,12 @@
 const headerParams = {
     tagName: "header",
-    classList: ["header", "otherClass"],
+    classList: ["header"],
 };
 
-export { headerParams };
+const mainTitleParams = {
+    tagName: "h1",
+    classList: ["text-cyan-500"],
+    text: "to-do",
+};
+
+export { headerParams, mainTitleParams };
