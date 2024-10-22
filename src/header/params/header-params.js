@@ -5,8 +5,19 @@ const headerParams = {
 
 const mainTitleParams = {
     tagName: "h1",
-    classList: ["text-cyan-500"],
+    classList: [
+        "text-cyan-500",
+        "text-2xl",
+        "font-medium",
+        "capitalize",
+        "font-['Roboto_Slab']",
+    ],
     text: "to-do",
 };
 
-export { headerParams, mainTitleParams };
+const nightBtnParams = {
+    tagName: "button",
+    classList: ["w-10", "h-10", "rounded-full", "bg-cyan-600"],
+};
+
+export { headerParams, mainTitleParams, nightBtnParams };
