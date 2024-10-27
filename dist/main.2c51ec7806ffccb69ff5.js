@@ -9016,12 +9016,20 @@ const createElement = elementParams => {
 ;// CONCATENATED MODULE: ./src/header/params/header-params.js
 const headerParams = {
   tagName: "header",
-  classList: ["header"]
+  classList: ["header", "flex", "justify-between"]
 };
 const mainTitleParams = {
-  tagName: 'h1',
-  classList: ['text-cyan-500'],
-  text: 'to-do'
+  tagName: "h1",
+  classList: ["text-cyan-500", "text-2xl", "font-medium", "capitalize", "font-['Roboto_Slab']"],
+  text: "to-do"
+};
+const nightBtnParams = {
+  tagName: "button",
+  classList: ["w-10", "h-10", "rounded-full", "bg-cyan-600", "flex", "justify-center", "items-center"]
+};
+const wrapperIconBtnParams = {
+  tagName: 'span',
+  classList: ["block", "w-8", "h-8", "bg-[url('.././img/sun-icon.svg')]"]
 };
 
 ;// CONCATENATED MODULE: ./src/header/header-view.js
@@ -9030,7 +9038,11 @@ const mainTitleParams = {
 const createHeader = () => {
   const headerElement = creator(headerParams);
   const mainTitle = creator(mainTitleParams);
-  headerElement.insertAdjacentElement('beforeend', mainTitle);
+  const nightModeBtn = creator(nightBtnParams);
+  const wrapperIconElement = creator(wrapperIconBtnParams);
+  headerElement.insertAdjacentElement("beforeend", mainTitle);
+  headerElement.insertAdjacentElement("beforeend", nightModeBtn);
+  nightModeBtn.insertAdjacentElement("beforeend", wrapperIconElement);
   return headerElement;
 };
 /* harmony default export */ const header_view = (createHeader);
@@ -9043,6 +9055,7 @@ const initApp = () => {
 };
 /* harmony default export */ const init = (initApp);
 ;// CONCATENATED MODULE: ./src/index.js
+
 
 
 init();

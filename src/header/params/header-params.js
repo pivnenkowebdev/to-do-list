@@ -1,6 +1,15 @@
 const headerParams = {
     tagName: "header",
-    classList: ["header"],
+    classList: [
+        "header",
+        "flex",
+        "justify-between",
+        "items-center",
+        "py-3",
+        "container",
+        "border-b-2",
+        "border-cyan-600",
+    ],
 };
 
 const mainTitleParams = {
@@ -17,7 +26,27 @@ const mainTitleParams = {
 
 const nightBtnParams = {
     tagName: "button",
-    classList: ["w-10", "h-10", "rounded-full", "bg-cyan-600"],
+    classList: [
+        "w-10",
+        "h-10",
+        "rounded-full",
+        "bg-cyan-600",
+        "flex",
+        "justify-center",
+        "items-center",
+    ],
 };
 
-export { headerParams, mainTitleParams, nightBtnParams };
+const wrapperIconBtnParams = {
+    tagName: "span",
+    classList: [
+        "block",
+        "w-7",
+        "h-7",
+        "bg-[url('.././img/sun-icon.svg')]",
+        "bg-no-repeat",
+        "bg-contain",
+    ],
+};
+
+export { headerParams, mainTitleParams, nightBtnParams, wrapperIconBtnParams };
