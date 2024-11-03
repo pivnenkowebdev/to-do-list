@@ -7,3 +7,4 @@ const initApp = () => {
 };
 
 export default initApp;
+// export {containerApp}

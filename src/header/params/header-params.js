@@ -9,6 +9,7 @@ const headerParams = {
         "container",
         "border-b-2",
         "border-cyan-600",
+        "dark:border-white",
     ],
 };
 
@@ -20,6 +21,7 @@ const mainTitleParams = {
         "font-medium",
         "capitalize",
         "font-['Roboto_Slab']",
+        "dark:text-white",
     ],
     text: "to-do",
 };
@@ -34,6 +36,7 @@ const nightBtnParams = {
         "flex",
         "justify-center",
         "items-center",
+        "dark:bg-white",
     ],
 };
 
@@ -44,6 +47,7 @@ const wrapperIconBtnParams = {
         "w-7",
         "h-7",
         "bg-[url('.././img/sun-icon.svg')]",
+        "dark:bg-[url('.././img/moon.svg')]",
         "bg-no-repeat",
         "bg-contain",
     ],

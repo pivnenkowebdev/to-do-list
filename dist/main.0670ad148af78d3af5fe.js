@@ -9002,11 +9002,7 @@ _global["default"]._babelPolyfill = true;
 ;// CONCATENATED MODULE: ./src/utilities/creator.js
 const createElement = elementParams => {
   const tagElement = document.createElement(elementParams.tagName);
-
-  // if (elementParams.classList && elementParams.length > 0) {
   tagElement.classList.add(...elementParams.classList);
-  // }
-
   if (elementParams.text) {
     tagElement.innerText = elementParams.text;
   }
@@ -9016,23 +9012,35 @@ const createElement = elementParams => {
 ;// CONCATENATED MODULE: ./src/header/params/header-params.js
 const headerParams = {
   tagName: "header",
-  classList: ["header", "flex", "justify-between"]
+  classList: ["header", "flex", "justify-between", "items-center", "py-3", "container", "border-b-2", "border-cyan-600", "dark:border-white"]
 };
 const mainTitleParams = {
   tagName: "h1",
-  classList: ["text-cyan-500", "text-2xl", "font-medium", "capitalize", "font-['Roboto_Slab']"],
+  classList: ["text-cyan-500", "text-2xl", "font-medium", "capitalize", "font-['Roboto_Slab']", "dark:text-white"],
   text: "to-do"
 };
 const nightBtnParams = {
   tagName: "button",
-  classList: ["w-10", "h-10", "rounded-full", "bg-cyan-600", "flex", "justify-center", "items-center"]
+  classList: ["w-10", "h-10", "rounded-full", "bg-cyan-600", "flex", "justify-center", "items-center", "dark:bg-white"]
 };
 const wrapperIconBtnParams = {
-  tagName: 'span',
-  classList: ["block", "w-8", "h-8", "bg-[url('.././img/sun-icon.svg')]"]
+  tagName: "span",
+  classList: ["block", "w-7", "h-7", "bg-[url('.././img/sun-icon.svg')]", "dark:bg-[url('.././img/moon.svg')]", "bg-no-repeat", "bg-contain"]
 };
 
+;// CONCATENATED MODULE: ./src/controller/nightMode.js
+// import { containerApp } from "../utilities/init";
+
+const containerApp = document.body;
+const bodyClassList = ['dark', 'bg-gray-900'];
+const nightMode = () => {
+  bodyClassList.forEach(className => {
+    containerApp.classList.toggle(className);
+  });
+};
+/* harmony default export */ const controller_nightMode = (nightMode);
 ;// CONCATENATED MODULE: ./src/header/header-view.js
+
 
 
 const createHeader = () => {
@@ -9043,6 +9051,7 @@ const createHeader = () => {
   headerElement.insertAdjacentElement("beforeend", mainTitle);
   headerElement.insertAdjacentElement("beforeend", nightModeBtn);
   nightModeBtn.insertAdjacentElement("beforeend", wrapperIconElement);
+  nightModeBtn.addEventListener('click', controller_nightMode);
   return headerElement;
 };
 /* harmony default export */ const header_view = (createHeader);
@@ -9054,6 +9063,7 @@ const initApp = () => {
   containerApp.insertAdjacentElement("beforeend", header);
 };
 /* harmony default export */ const init = (initApp);
+// export {containerApp}
 ;// CONCATENATED MODULE: ./src/index.js
 
 
