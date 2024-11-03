@@ -9032,7 +9032,7 @@ const wrapperIconBtnParams = {
 // import { containerApp } from "../utilities/init";
 
 const containerApp = document.body;
-const bodyClassList = ['dark', 'bg-gray-900'];
+const bodyClassList = ["dark", "bg-gray-900"];
 const nightMode = () => {
   bodyClassList.forEach(className => {
     containerApp.classList.toggle(className);
@@ -9051,7 +9051,7 @@ const createHeader = () => {
   headerElement.insertAdjacentElement("beforeend", mainTitle);
   headerElement.insertAdjacentElement("beforeend", nightModeBtn);
   nightModeBtn.insertAdjacentElement("beforeend", wrapperIconElement);
-  nightModeBtn.addEventListener('click', controller_nightMode);
+  nightModeBtn.addEventListener("click", controller_nightMode);
   return headerElement;
 };
 /* harmony default export */ const header_view = (createHeader);
