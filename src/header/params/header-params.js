@@ -16,7 +16,7 @@ const headerParams = {
 const mainTitleParams = {
     tagName: "h1",
     classList: [
-        "text-cyan-500",
+        "text-cyan-600",
         "text-2xl",
         "font-medium",
         "capitalize",

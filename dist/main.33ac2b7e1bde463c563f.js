@@ -9009,6 +9009,27 @@ const createElement = elementParams => {
   return tagElement;
 };
 /* harmony default export */ const creator = (createElement);
+;// CONCATENATED MODULE: ./src/button-add-note/button-add-note-params.js
+const buttonAddNoteParams = {
+  tagName: "button",
+  classList: ["mt-6", "flex", "mx-auto", "text-cyan-600", "items-center", "gap-2", "text-2xl", "dark:text-white"],
+  text: "Add Note"
+};
+const buttonAddNoteIconParams = {
+  tagName: "span",
+  classList: ["w-10", "h-10", "block", "bg-[url('.././img/btn-add-note-icon.svg')]", "dark:bg-[url('.././img/btn-add-note-icon-dark.svg')]", "bg-cover"]
+};
+
+;// CONCATENATED MODULE: ./src/button-add-note/create-button-add-note.js
+
+
+const createbuttonAddNote = () => {
+  const buttonElement = creator(buttonAddNoteParams);
+  const noteIconElement = creator(buttonAddNoteIconParams);
+  buttonElement.insertAdjacentElement("beforeend", noteIconElement);
+  return buttonElement;
+};
+/* harmony default export */ const create_button_add_note = (createbuttonAddNote);
 ;// CONCATENATED MODULE: ./src/header/params/header-params.js
 const headerParams = {
   tagName: "header",
@@ -9032,7 +9053,7 @@ const wrapperIconBtnParams = {
 // import { containerApp } from "../utilities/init";
 
 const containerApp = document.body;
-const bodyClassList = ['dark', 'bg-gray-900'];
+const bodyClassList = ["dark", "bg-gray-900"];
 const nightMode = () => {
   bodyClassList.forEach(className => {
     containerApp.classList.toggle(className);
@@ -9051,16 +9072,19 @@ const createHeader = () => {
   headerElement.insertAdjacentElement("beforeend", mainTitle);
   headerElement.insertAdjacentElement("beforeend", nightModeBtn);
   nightModeBtn.insertAdjacentElement("beforeend", wrapperIconElement);
-  nightModeBtn.addEventListener('click', controller_nightMode);
+  nightModeBtn.addEventListener("click", controller_nightMode);
   return headerElement;
 };
 /* harmony default export */ const header_view = (createHeader);
 ;// CONCATENATED MODULE: ./src/utilities/init.js
 
+
 const initApp = () => {
   const containerApp = document.body;
   const header = header_view();
   containerApp.insertAdjacentElement("beforeend", header);
+  const buttonAddNote = create_button_add_note();
+  containerApp.insertAdjacentElement("beforeend", buttonAddNote);
 };
 /* harmony default export */ const init = (initApp);
 // export {containerApp}
