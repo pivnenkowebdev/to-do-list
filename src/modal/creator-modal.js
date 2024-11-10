@@ -1,14 +1,13 @@
 import createElement from "../utilities/creator.js";
 import {
-    // modalParams
+    // modalParams,
     fadeBlockParams,
 } from "./modal-params.js";
 
 const creatorModal = () => {
-    // const modalElement = createElement()
+    const containerApp = document.body;
     const fadeBlockElement = createElement(fadeBlockParams);
-
-    return fadeBlockElement;
+    containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
 };
 
 export default creatorModal;

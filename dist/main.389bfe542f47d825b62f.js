@@ -9023,16 +9023,19 @@ const buttonAddNoteIconParams = {
 ;// CONCATENATED MODULE: ./src/modal/modal-params.js
 const fadeBlockParams = {
   tagName: "div",
-  classList: ["w-screen", "h-screen", "bg-slate-200", "opacity-90", "absolute", "top-0", "left-0"]
+  classList: ["w-screen", "h-screen", "bg-[#e2e8f046]", "backdrop-blur-sm", "absolute", "top-0", "left-0"]
 };
 
 ;// CONCATENATED MODULE: ./src/modal/creator-modal.js
 
 
 const creatorModal = () => {
+  const containerApp = document.body;
   // const modalElement = createElement()
   const fadeBlockElement = creator(fadeBlockParams);
-  return fadeBlockElement;
+  containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
+
+  // return fadeBlockElement;
 };
 /* harmony default export */ const creator_modal = (creatorModal);
 ;// CONCATENATED MODULE: ./src/button-add-note/create-button-add-note.js
@@ -9096,6 +9099,7 @@ const createHeader = () => {
 ;// CONCATENATED MODULE: ./src/utilities/init.js
 
 
+// import creatorModal from "../modal/creator-modal.js";
 
 const initApp = () => {
   const containerApp = document.body;
@@ -9103,8 +9107,6 @@ const initApp = () => {
   containerApp.insertAdjacentElement("beforeend", header);
   const buttonAddNote = create_button_add_note();
   containerApp.insertAdjacentElement("beforeend", buttonAddNote);
-  const modal = creator_modal();
-  containerApp.insertAdjacentElement("beforeend", modal);
 };
 /* harmony default export */ const init = (initApp);
 // export {containerApp}
