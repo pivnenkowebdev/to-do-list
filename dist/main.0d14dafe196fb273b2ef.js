@@ -9012,7 +9012,7 @@ const createElement = elementParams => {
 ;// CONCATENATED MODULE: ./src/button-add-note/button-add-note-params.js
 const buttonAddNoteParams = {
   tagName: "button",
-  classList: ["mt-6", "flex", "mx-auto", "text-cyan-600", "items-center", "gap-2", "text-2xl", "dark:text-white"],
+  classList: ["mt-6", "flex", "mx-auto", "text-cyan-600", "items-center", "gap-2", "text-2xl", "dark:text-white", "font-semibold"],
   text: "Add Note"
 };
 const buttonAddNoteIconParams = {
@@ -9020,13 +9020,30 @@ const buttonAddNoteIconParams = {
   classList: ["w-10", "h-10", "block", "bg-[url('.././img/btn-add-note-icon.svg')]", "dark:bg-[url('.././img/btn-add-note-icon-dark.svg')]", "bg-cover"]
 };
 
+;// CONCATENATED MODULE: ./src/modal/modal-params.js
+const fadeBlockParams = {
+  tagName: "div",
+  classList: ["w-screen", "h-screen", "bg-slate-200", "opacity-90", "absolute", "top-0", "left-0"]
+};
+
+;// CONCATENATED MODULE: ./src/modal/creator-modal.js
+
+
+const creatorModal = () => {
+  // const modalElement = createElement()
+  const fadeBlockElement = creator(fadeBlockParams);
+  return fadeBlockElement;
+};
+/* harmony default export */ const creator_modal = (creatorModal);
 ;// CONCATENATED MODULE: ./src/button-add-note/create-button-add-note.js
+
 
 
 const createbuttonAddNote = () => {
   const buttonElement = creator(buttonAddNoteParams);
   const noteIconElement = creator(buttonAddNoteIconParams);
   buttonElement.insertAdjacentElement("beforeend", noteIconElement);
+  buttonElement.addEventListener("click", creator_modal);
   return buttonElement;
 };
 /* harmony default export */ const create_button_add_note = (createbuttonAddNote);
@@ -9037,7 +9054,7 @@ const headerParams = {
 };
 const mainTitleParams = {
   tagName: "h1",
-  classList: ["text-cyan-500", "text-2xl", "font-medium", "capitalize", "font-['Roboto_Slab']", "dark:text-white"],
+  classList: ["text-cyan-600", "text-2xl", "font-medium", "capitalize", "font-['Roboto_Slab']", "dark:text-white"],
   text: "to-do"
 };
 const nightBtnParams = {
@@ -9079,12 +9096,15 @@ const createHeader = () => {
 ;// CONCATENATED MODULE: ./src/utilities/init.js
 
 
+
 const initApp = () => {
   const containerApp = document.body;
   const header = header_view();
   containerApp.insertAdjacentElement("beforeend", header);
   const buttonAddNote = create_button_add_note();
   containerApp.insertAdjacentElement("beforeend", buttonAddNote);
+  const modal = creator_modal();
+  containerApp.insertAdjacentElement("beforeend", modal);
 };
 /* harmony default export */ const init = (initApp);
 // export {containerApp}
