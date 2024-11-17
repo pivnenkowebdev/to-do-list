@@ -11,4 +11,40 @@ const fadeBlockParams = {
     ],
 };
 
-export { fadeBlockParams };
+const modalParams = {
+    tagName: "form",
+    classList: [
+        "absolute",
+        "bg-white",
+        "max-w-[915px]",
+        "w-full",
+        "rounded-lg",
+        "bottom-2/4",
+        "right-2/4",
+        "translate-x-2/4",
+        "translate-y-2/4",
+        "py-9",
+        "px-7",
+    ],
+};
+
+const headerModalParams = {
+    tagName: "div",
+    classList: [
+        "flex",
+        "max-w-[362px]",
+        "gap-2",
+        "border-b-2",
+        "border-cyan-600",
+    ],
+};
+
+const inputTitleParams = {
+    tagName: "input",
+    classList: [],
+    attrParams: {
+        type: "text",
+    },
+};
+
+export { fadeBlockParams, modalParams, headerModalParams, inputTitleParams };

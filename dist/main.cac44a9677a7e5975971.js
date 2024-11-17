@@ -9006,6 +9006,9 @@ const createElement = elementParams => {
   if (elementParams.text) {
     tagElement.innerText = elementParams.text;
   }
+  for (const key in elementParams.attrParams) {
+    tagElement.setAttribute(key, elementParams.attrParams[key]);
+  }
   return tagElement;
 };
 /* harmony default export */ const creator = (createElement);
@@ -9025,17 +9028,35 @@ const fadeBlockParams = {
   tagName: "div",
   classList: ["w-screen", "h-screen", "bg-[#e2e8f046]", "backdrop-blur-sm", "absolute", "top-0", "left-0"]
 };
+const modalParams = {
+  tagName: "form",
+  classList: ["absolute", "bg-white", "max-w-[915px]", "w-full", "rounded-lg", "bottom-2/4", "right-2/4", "translate-x-2/4", "translate-y-2/4", "py-9", "px-7"]
+};
+const headerModalParams = {
+  tagName: "div",
+  classList: ["flex", "max-w-[362px]", "gap-2", "border-b-2", "border-cyan-600"]
+};
+const inputTitleParams = {
+  tagName: "input",
+  classList: [],
+  attrParams: {
+    "type": "text"
+  }
+};
 
 ;// CONCATENATED MODULE: ./src/modal/creator-modal.js
 
 
 const creatorModal = () => {
   const containerApp = document.body;
-  // const modalElement = createElement()
   const fadeBlockElement = creator(fadeBlockParams);
+  const modalElement = creator(modalParams);
+  const headerModalElement = creator(headerModalParams);
+  const inputTitle = creator(inputTitleParams);
+  modalElement.insertAdjacentElement("beforeend", headerModalElement);
+  headerModalElement.insertAdjacentElement("beforeend", inputTitle);
   containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
-
-  // return fadeBlockElement;
+  containerApp.insertAdjacentElement("beforeend", modalElement);
 };
 /* harmony default export */ const creator_modal = (creatorModal);
 ;// CONCATENATED MODULE: ./src/button-add-note/create-button-add-note.js
@@ -9099,8 +9120,6 @@ const createHeader = () => {
 ;// CONCATENATED MODULE: ./src/utilities/init.js
 
 
-// import creatorModal from "../modal/creator-modal.js";
-
 const initApp = () => {
   const containerApp = document.body;
   const header = header_view();
@@ -9109,7 +9128,6 @@ const initApp = () => {
   containerApp.insertAdjacentElement("beforeend", buttonAddNote);
 };
 /* harmony default export */ const init = (initApp);
-// export {containerApp}
 ;// CONCATENATED MODULE: ./src/index.js
 
 

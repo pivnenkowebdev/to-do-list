@@ -7,6 +7,12 @@ const createElement = (elementParams) => {
         tagElement.innerText = elementParams.text;
     }
 
+    if (elementParams.attrParams) {
+        for (const key in elementParams.attrParams) {
+            tagElement.setAttribute(key, elementParams.attrParams[key]);
+        }
+    }
+
     return tagElement;
 };
 
