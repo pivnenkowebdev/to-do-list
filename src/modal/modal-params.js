@@ -47,4 +47,44 @@ const inputTitleParams = {
     },
 };
 
-export { fadeBlockParams, modalParams, headerModalParams, inputTitleParams };
+const checkboxParams = {
+    tagName: "input",
+    classList: [],
+    attrParams: {
+        type: "checkbox",
+    },
+};
+
+const textareaParams = {
+    tagName: "textarea",
+    classList: [],
+};
+
+const wrapperElementParams = {
+    tagName: "div",
+    classList: [],
+};
+
+const buttonAddParams = {
+    tagName: "button",
+    classList: [],
+    text: "Add",
+};
+
+const buttonCancelParams = {
+    tagName: "button",
+    classList: [],
+    text: "Cancel",
+};
+
+export {
+    fadeBlockParams,
+    modalParams,
+    headerModalParams,
+    inputTitleParams,
+    checkboxParams,
+    textareaParams,
+    wrapperElementParams,
+    buttonAddParams,
+    buttonCancelParams,
+};
