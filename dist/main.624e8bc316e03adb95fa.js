@@ -9006,8 +9006,10 @@ const createElement = elementParams => {
   if (elementParams.text) {
     tagElement.innerText = elementParams.text;
   }
-  for (const key in elementParams.attrParams) {
-    tagElement.setAttribute(key, elementParams.attrParams[key]);
+  if (elementParams.attrParams) {
+    for (const key in elementParams.attrParams) {
+      tagElement.setAttribute(key, elementParams.attrParams[key]);
+    }
   }
   return tagElement;
 };
@@ -9040,8 +9042,33 @@ const inputTitleParams = {
   tagName: "input",
   classList: [],
   attrParams: {
-    "type": "text"
+    type: "text"
   }
+};
+const checkboxParams = {
+  tagName: "input",
+  classList: [],
+  attrParams: {
+    type: "checkbox"
+  }
+};
+const textareaParams = {
+  tagName: "textarea",
+  classList: ["resize-none"]
+};
+const wrapperElementParams = {
+  tagName: "div",
+  classList: []
+};
+const buttonAddParams = {
+  tagName: "button",
+  classList: [],
+  text: "Add"
+};
+const buttonCancelParams = {
+  tagName: "button",
+  classList: [],
+  text: "Cancel"
 };
 
 ;// CONCATENATED MODULE: ./src/modal/creator-modal.js
@@ -9053,8 +9080,18 @@ const creatorModal = () => {
   const modalElement = creator(modalParams);
   const headerModalElement = creator(headerModalParams);
   const inputTitle = creator(inputTitleParams);
+  const checkbox = creator(checkboxParams);
+  const textarea = creator(textareaParams);
+  const buttonAdd = creator(buttonAddParams);
+  const buttonCancel = creator(buttonCancelParams);
+  const wrapperElement = creator(wrapperElementParams);
   modalElement.insertAdjacentElement("beforeend", headerModalElement);
+  modalElement.insertAdjacentElement("beforeend", textarea);
+  modalElement.insertAdjacentElement("beforeend", wrapperElement);
+  wrapperElement.insertAdjacentElement("beforeend", buttonCancel);
+  wrapperElement.insertAdjacentElement("beforeend", buttonAdd);
   headerModalElement.insertAdjacentElement("beforeend", inputTitle);
+  headerModalElement.insertAdjacentElement("beforeend", checkbox);
   containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
   containerApp.insertAdjacentElement("beforeend", modalElement);
 };
