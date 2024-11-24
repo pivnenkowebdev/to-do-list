@@ -9036,38 +9036,42 @@ const modalParams = {
 };
 const headerModalParams = {
   tagName: "div",
-  classList: ["flex", "max-w-[362px]", "gap-2", "border-b-2", "border-cyan-600"]
+  classList: ["flex", "max-w-[362px]", "gap-2", "border-b-2", "border-cyan-600", "mb-3"]
 };
 const inputTitleParams = {
   tagName: "input",
-  classList: [],
+  classList: ["outline-none", "text-xl", "font-medium", "w-full"],
   attrParams: {
-    type: "text"
+    type: "text",
+    placeholder: "Title"
   }
 };
 const checkboxParams = {
   tagName: "input",
-  classList: [],
+  classList: ["real-checkbox"],
   attrParams: {
     type: "checkbox"
   }
 };
 const textareaParams = {
   tagName: "textarea",
-  classList: ["resize-none"]
+  classList: ["outline-none", "resize-y", "w-full", "min-h-[250px]", "max-h-[350px]", "mb-4", "focus:shadow-xl", "text-lg"],
+  attrParams: {
+    placeholder: "Your note"
+  }
 };
 const wrapperElementParams = {
   tagName: "div",
-  classList: []
+  classList: ["flex", "gap-2", "justify-end"]
 };
 const buttonAddParams = {
   tagName: "button",
-  classList: [],
+  classList: ["bg-cyan-600", "rounded-lg", "font-medium", "text-white", "px-4", "py-2", "min-w-[80px]"],
   text: "Add"
 };
 const buttonCancelParams = {
   tagName: "button",
-  classList: [],
+  classList: ["bg-red-800", "rounded-lg", "font-medium", "text-white", "px-4", "py-2", "min-w-[80px]"],
   text: "Cancel"
 };
 

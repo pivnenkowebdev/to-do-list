@@ -49,6 +49,16 @@ const inputTitleParams = {
     },
 };
 
+const wrapperCheckboxParams = {
+    tagName: "label",
+    classList: ["cursor-pointer"],
+};
+
+const fakeCheckboxParams = {
+    tagName: "div",
+    classList: ["custom-checkbox"],
+};
+
 const checkboxParams = {
     tagName: "input",
     classList: ["real-checkbox"],
@@ -117,4 +127,6 @@ export {
     wrapperElementParams,
     buttonAddParams,
     buttonCancelParams,
+    wrapperCheckboxParams,
+    fakeCheckboxParams,
 };

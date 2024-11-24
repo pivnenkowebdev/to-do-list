@@ -4,10 +4,12 @@ import {
     buttonCancelParams,
     checkboxParams,
     fadeBlockParams,
+    fakeCheckboxParams,
     headerModalParams,
     inputTitleParams,
     modalParams,
     textareaParams,
+    wrapperCheckboxParams,
     wrapperElementParams,
 } from "./modal-params.js";
 
@@ -22,6 +24,8 @@ const creatorModal = () => {
     const buttonAdd = createElement(buttonAddParams);
     const buttonCancel = createElement(buttonCancelParams);
     const wrapperElement = createElement(wrapperElementParams);
+    const wrapperCheckbox = createElement(wrapperCheckboxParams);
+    const fakeCheckbox = createElement(fakeCheckboxParams);
 
     modalElement.insertAdjacentElement("beforeend", headerModalElement);
     modalElement.insertAdjacentElement("beforeend", textarea);
@@ -31,7 +35,9 @@ const creatorModal = () => {
     wrapperElement.insertAdjacentElement("beforeend", buttonAdd);
 
     headerModalElement.insertAdjacentElement("beforeend", inputTitle);
-    headerModalElement.insertAdjacentElement("beforeend", checkbox);
+    headerModalElement.insertAdjacentElement("beforeend", wrapperCheckbox);
+    wrapperCheckbox.insertAdjacentElement("beforeend", checkbox);
+    wrapperCheckbox.insertAdjacentElement("beforeend", fakeCheckbox);
 
     containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
     containerApp.insertAdjacentElement("beforeend", modalElement);
