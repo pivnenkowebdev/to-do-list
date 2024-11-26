@@ -9025,6 +9025,25 @@ const buttonAddNoteIconParams = {
   classList: ["w-10", "h-10", "block", "bg-[url('.././img/btn-add-note-icon.svg')]", "dark:bg-[url('.././img/btn-add-note-icon-dark.svg')]", "bg-cover"]
 };
 
+;// CONCATENATED MODULE: ./src/utilities/data-handler.js
+// 1. Получить форму из DOM +
+// 2. С помощью обьекта formData получить данные из форм
+// 3. Обработать данные из формы, подготовить к созранению в локалку
+// 4. Создать структуру для хранения данных
+const dataNotes = {
+  favoritesNotes: [],
+  regularNotes: []
+};
+const setDataToStorage = data => {
+  const dataJson = JSON.stringify(data);
+  const keyLocal = "notes";
+  localStorage.setItem(keyLocal, dataJson);
+};
+const formDataHandler = formElement => {
+  console.log(formElement);
+};
+setDataToStorage(dataNotes);
+/* harmony default export */ const data_handler = (formDataHandler);
 ;// CONCATENATED MODULE: ./src/modal/modal-params.js
 const fadeBlockParams = {
   tagName: "div",
@@ -9032,7 +9051,10 @@ const fadeBlockParams = {
 };
 const modalParams = {
   tagName: "form",
-  classList: ["absolute", "bg-white", "max-w-[915px]", "w-full", "rounded-lg", "bottom-2/4", "right-2/4", "translate-x-2/4", "translate-y-2/4", "py-9", "px-7"]
+  classList: ["absolute", "bg-white", "max-w-[915px]", "w-full", "rounded-lg", "bottom-2/4", "right-2/4", "translate-x-2/4", "translate-y-2/4", "py-9", "px-7"],
+  attrParams: {
+    id: "form"
+  }
 };
 const headerModalParams = {
   tagName: "div",
@@ -9045,6 +9067,14 @@ const inputTitleParams = {
     type: "text",
     placeholder: "Title"
   }
+};
+const wrapperCheckboxParams = {
+  tagName: "label",
+  classList: ["cursor-pointer"]
+};
+const fakeCheckboxParams = {
+  tagName: "div",
+  classList: ["custom-checkbox"]
 };
 const checkboxParams = {
   tagName: "input",
@@ -9078,6 +9108,7 @@ const buttonCancelParams = {
 ;// CONCATENATED MODULE: ./src/modal/creator-modal.js
 
 
+
 const creatorModal = () => {
   const containerApp = document.body;
   const fadeBlockElement = creator(fadeBlockParams);
@@ -9089,15 +9120,20 @@ const creatorModal = () => {
   const buttonAdd = creator(buttonAddParams);
   const buttonCancel = creator(buttonCancelParams);
   const wrapperElement = creator(wrapperElementParams);
+  const wrapperCheckbox = creator(wrapperCheckboxParams);
+  const fakeCheckbox = creator(fakeCheckboxParams);
   modalElement.insertAdjacentElement("beforeend", headerModalElement);
   modalElement.insertAdjacentElement("beforeend", textarea);
   modalElement.insertAdjacentElement("beforeend", wrapperElement);
   wrapperElement.insertAdjacentElement("beforeend", buttonCancel);
   wrapperElement.insertAdjacentElement("beforeend", buttonAdd);
   headerModalElement.insertAdjacentElement("beforeend", inputTitle);
-  headerModalElement.insertAdjacentElement("beforeend", checkbox);
+  headerModalElement.insertAdjacentElement("beforeend", wrapperCheckbox);
+  wrapperCheckbox.insertAdjacentElement("beforeend", checkbox);
+  wrapperCheckbox.insertAdjacentElement("beforeend", fakeCheckbox);
   containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
   containerApp.insertAdjacentElement("beforeend", modalElement);
+  modalElement.addEventListener("submit", data_handler(modalElement));
 };
 /* harmony default export */ const creator_modal = (creatorModal);
 ;// CONCATENATED MODULE: ./src/button-add-note/create-button-add-note.js

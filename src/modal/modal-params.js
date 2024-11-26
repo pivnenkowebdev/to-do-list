@@ -26,6 +26,9 @@ const modalParams = {
         "py-9",
         "px-7",
     ],
+    attrParams: {
+        id: "form",
+    },
 };
 
 const headerModalParams = {

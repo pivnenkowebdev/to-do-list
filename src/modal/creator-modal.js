@@ -1,4 +1,5 @@
 import createElement from "../utilities/creator.js";
+import formDataHandler from "../utilities/data-handler.js";
 import {
     buttonAddParams,
     buttonCancelParams,
@@ -41,6 +42,8 @@ const creatorModal = () => {
 
     containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
     containerApp.insertAdjacentElement("beforeend", modalElement);
+
+    modalElement.addEventListener("submit", formDataHandler(modalElement));
 };
 
 export default creatorModal;
