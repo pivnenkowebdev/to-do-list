@@ -9029,20 +9029,37 @@ const buttonAddNoteIconParams = {
 // 1. Получить форму из DOM +
 // 2. С помощью обьекта formData получить данные из форм
 // 3. Обработать данные из формы, подготовить к созранению в локалку
-// 4. Создать структуру для хранения данных
-const dataNotes = {
-  favoritesNotes: [],
-  regularNotes: []
-};
-const setDataToStorage = data => {
+// 4. Создать структуру для хранения данных +
+// 5. Функция для добавления заметки в нужный массив в обьекте data 
+
+const keyLocal = "notes";
+const setDataToStorage = (key, data) => {
   const dataJson = JSON.stringify(data);
-  const keyLocal = "notes";
-  localStorage.setItem(keyLocal, dataJson);
+  localStorage.setItem(key, dataJson);
+};
+const getDataFromStorage = key => {
+  const data = JSON.parse(localStorage.getItem(key));
+  return data;
 };
 const formDataHandler = formElement => {
   console.log(formElement);
 };
-setDataToStorage(dataNotes);
+const initData = () => {
+  const isData = getDataFromStorage(keyLocal);
+  let data = null;
+  if (isData) {
+    data = isData;
+  } else {
+    const dataNotes = {
+      favoritesNotes: [],
+      regularNotes: []
+    };
+    setDataToStorage(keyLocal, dataNotes);
+    data = dataNotes;
+  }
+  return data;
+};
+const data = initData();
 /* harmony default export */ const data_handler = (formDataHandler);
 ;// CONCATENATED MODULE: ./src/modal/modal-params.js
 const fadeBlockParams = {

@@ -1,21 +1,48 @@
-// 1. Получить форму из DOM +
-// 2. С помощью обьекта formData получить данные из форм
-// 3. Обработать данные из формы, подготовить к созранению в локалку
-// 4. Создать структуру для хранения данных
-const dataNotes = {
-    favoritesNotes: [],
-    regularNotes: [],
-};
+const keyLocal = "notes";
 
-const setDataToStorage = (data) => {
+const setDataToStorage = (key, data) => {
     const dataJson = JSON.stringify(data);
-    const keyLocal = "notes";
-    localStorage.setItem(keyLocal, dataJson);
+    localStorage.setItem(key, dataJson);
 };
 
-const formDataHandler = (formElement) => {
-    console.log(formElement);
+const getDataFromStorage = (key) => {
+    const data = JSON.parse(localStorage.getItem(key));
+    return data;
 };
 
-setDataToStorage(dataNotes);
+const formDataHandler = (event, formElement) => {
+    event.preventDefault();
+    const formData = new FormData(formElement);
+    const isFavorite = formData.get("checkbox");
+
+    const objectNote = {
+        title: formData.get("title"),
+        textarea: formData.get("textarea"),
+        checkbox: formData.get("checkbox"),
+    };
+
+    isFavorite
+        ? data.favoritesNotes.push(objectNote)
+        : data.regularNotes.push(objectNote);
+    setDataToStorage(keyLocal, data);
+};
+
+const initData = () => {
+    const isData = getDataFromStorage(keyLocal);
+    let data = null;
+    if (isData) {
+        data = isData;
+    } else {
+        const dataNotes = {
+            favoritesNotes: [],
+            regularNotes: [],
+        };
+        setDataToStorage(keyLocal, dataNotes);
+        data = dataNotes;
+    }
+    return data;
+};
+
+const data = initData();
+
 export default formDataHandler;

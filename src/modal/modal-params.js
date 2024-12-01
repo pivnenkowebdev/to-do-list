@@ -49,6 +49,7 @@ const inputTitleParams = {
     attrParams: {
         type: "text",
         placeholder: "Title",
+        name: "title",
     },
 };
 
@@ -67,6 +68,7 @@ const checkboxParams = {
     classList: ["real-checkbox"],
     attrParams: {
         type: "checkbox",
+        name: "checkbox",
     },
 };
 
@@ -84,6 +86,7 @@ const textareaParams = {
     ],
     attrParams: {
         placeholder: "Your note",
+        name: "textarea",
     },
 };
 
