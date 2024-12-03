@@ -9026,12 +9026,6 @@ const buttonAddNoteIconParams = {
 };
 
 ;// CONCATENATED MODULE: ./src/utilities/data-handler.js
-// 1. Получить форму из DOM +
-// 2. С помощью обьекта formData получить данные из форм
-// 3. Обработать данные из формы, подготовить к созранению в локалку
-// 4. Создать структуру для хранения данных +
-// 5. Функция для добавления заметки в нужный массив в обьекте data 
-
 const keyLocal = "notes";
 const setDataToStorage = (key, data) => {
   const dataJson = JSON.stringify(data);
@@ -9041,8 +9035,17 @@ const getDataFromStorage = key => {
   const data = JSON.parse(localStorage.getItem(key));
   return data;
 };
-const formDataHandler = formElement => {
-  console.log(formElement);
+const formDataHandler = (event, formElement) => {
+  event.preventDefault();
+  const formData = new FormData(formElement);
+  const isFavorite = formData.get("checkbox");
+  const objectNote = {
+    title: formData.get("title"),
+    textarea: formData.get("textarea"),
+    checkbox: formData.get("checkbox")
+  };
+  isFavorite ? data.favoritesNotes.push(objectNote) : data.regularNotes.push(objectNote);
+  setDataToStorage(keyLocal, data);
 };
 const initData = () => {
   const isData = getDataFromStorage(keyLocal);
@@ -9082,7 +9085,8 @@ const inputTitleParams = {
   classList: ["outline-none", "text-xl", "font-medium", "w-full"],
   attrParams: {
     type: "text",
-    placeholder: "Title"
+    placeholder: "Title",
+    name: "title"
   }
 };
 const wrapperCheckboxParams = {
@@ -9097,14 +9101,16 @@ const checkboxParams = {
   tagName: "input",
   classList: ["real-checkbox"],
   attrParams: {
-    type: "checkbox"
+    type: "checkbox",
+    name: "checkbox"
   }
 };
 const textareaParams = {
   tagName: "textarea",
   classList: ["outline-none", "resize-y", "w-full", "min-h-[250px]", "max-h-[350px]", "mb-4", "focus:shadow-xl", "text-lg"],
   attrParams: {
-    placeholder: "Your note"
+    placeholder: "Your note",
+    name: "textarea"
   }
 };
 const wrapperElementParams = {
@@ -9150,7 +9156,12 @@ const creatorModal = () => {
   wrapperCheckbox.insertAdjacentElement("beforeend", fakeCheckbox);
   containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
   containerApp.insertAdjacentElement("beforeend", modalElement);
-  modalElement.addEventListener("submit", data_handler(modalElement));
+  modalElement.addEventListener("submit", event => {
+    data_handler(event, modalElement);
+  });
+  buttonCancel.addEventListener("click", () => {
+    modalElement.remove();
+  });
 };
 /* harmony default export */ const creator_modal = (creatorModal);
 ;// CONCATENATED MODULE: ./src/button-add-note/create-button-add-note.js

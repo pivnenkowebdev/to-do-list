@@ -45,6 +45,18 @@ const creatorModal = () => {
 
     modalElement.addEventListener("submit", (event) => {
         formDataHandler(event, modalElement);
+        modalElement.remove();
+        fadeBlockElement.remove();
+    });
+
+    buttonCancel.addEventListener("click", () => {
+        modalElement.remove();
+        fadeBlockElement.remove();
+    });
+
+    fadeBlockElement.addEventListener("click", () => {
+        modalElement.remove();
+        fadeBlockElement.remove();
     });
 };
 
