@@ -1,7 +1,6 @@
-// 1. Параметр - массив заметок +
-// 2. Создать список, если его нет +
-// 3. Перебирать массив заметок и на каждом круге цикла создавать элемент
-// 4. Вставка элемента на страницу
+// 1. Добавить data в обьект заметок
+// 2. Отображать data в рендере
+// 3. HTML template element
 
 const clearRender = () => {
     const isList = document.querySelector("#list");
@@ -18,11 +17,15 @@ const render = (arrNotes) => {
         isList.id = "list";
         document.body.append(isList);
     }
+
+    const listWrapper = document.createDocumentFragment();
+    const template = document.createElement("li");
+    template.className = "my-4 max-w-4xl mx-auto";
+
     arrNotes.forEach((note) => {
         const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
 
         const noteElement = `
-        <li class="my-4 max-w-4xl mx-auto">
         <article class="border-2 border-cyan-600 rounded-md">
             <div class="flex justify-between pl-2">
                 <div class="flex">
@@ -39,12 +42,12 @@ const render = (arrNotes) => {
 
             <p class="pl-2">${note.textarea}</p>
         </article>
-        </li>
         `;
-        isList.insertAdjacentHTML("beforeend", noteElement);
+        template.innerHTML = noteElement;
     });
+
+    listWrapper.appendChild(template);
+    isList.appendChild(listWrapper);
 };
 
 export { render, clearRender };
-
-// Заменить иконку star-gold
