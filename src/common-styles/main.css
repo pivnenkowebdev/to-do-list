@@ -36,3 +36,10 @@ textarea::-webkit-resizer {
 .real-checkbox:checked + .custom-checkbox {
     background-image: url(../img/star-gold.svg);
 }
+
+.icon-star-gold {
+    background-image: url("../img/star-gold.svg");
+}
+.icon-star-btn {
+    background-image: url("../img/star-btn.svg");
+}

@@ -1,5 +1,6 @@
 import createElement from "../utilities/creator.js";
-import formDataHandler from "../utilities/data-handler.js";
+import { data, formDataHandler } from "../utilities/data-handler.js";
+import { render, clearRender } from "../utilities/render.js";
 import {
     buttonAddParams,
     buttonCancelParams,
@@ -45,6 +46,9 @@ const creatorModal = () => {
 
     modalElement.addEventListener("submit", (event) => {
         formDataHandler(event, modalElement);
+        clearRender();
+        render(data.favoritesNotes);
+        render(data.regularNotes);
         modalElement.remove();
         fadeBlockElement.remove();
     });

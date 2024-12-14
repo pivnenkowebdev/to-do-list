@@ -45,4 +45,4 @@ const initData = () => {
 
 const data = initData();
 
-export default formDataHandler;
+export { data, formDataHandler };
