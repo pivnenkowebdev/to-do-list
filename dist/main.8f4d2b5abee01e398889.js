@@ -9006,9 +9006,249 @@ const createElement = elementParams => {
   if (elementParams.text) {
     tagElement.innerText = elementParams.text;
   }
+  if (elementParams.attrParams) {
+    for (const key in elementParams.attrParams) {
+      tagElement.setAttribute(key, elementParams.attrParams[key]);
+    }
+  }
   return tagElement;
 };
 /* harmony default export */ const creator = (createElement);
+;// CONCATENATED MODULE: ./src/button-add-note/button-add-note-params.js
+const buttonAddNoteParams = {
+  tagName: "button",
+  classList: ["mt-6", "flex", "mx-auto", "text-cyan-600", "items-center", "gap-2", "text-2xl", "dark:text-white", "font-semibold"],
+  text: "Add Note"
+};
+const buttonAddNoteIconParams = {
+  tagName: "span",
+  classList: ["w-10", "h-10", "block", "bg-[url('.././img/btn-add-note-icon.svg')]", "dark:bg-[url('.././img/btn-add-note-icon-dark.svg')]", "bg-cover"]
+};
+
+;// CONCATENATED MODULE: ./src/utilities/data-handler.js
+const keyLocal = "notes";
+const setDataToStorage = (key, data) => {
+  const dataJson = JSON.stringify(data);
+  localStorage.setItem(key, dataJson);
+};
+const getDataFromStorage = key => {
+  const data = JSON.parse(localStorage.getItem(key));
+  return data;
+};
+const setDate = () => {
+  const currentDate = new Date();
+  return currentDate.toLocaleString("ru-RU", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+};
+const formDataHandler = (event, formElement) => {
+  event.preventDefault();
+  const formData = new FormData(formElement);
+  const isFavorite = formData.get("checkbox");
+  const objectNote = {
+    title: formData.get("title"),
+    textarea: formData.get("textarea"),
+    checkbox: formData.get("checkbox"),
+    date: setDate()
+  };
+  isFavorite ? data.favoritesNotes.push(objectNote) : data.regularNotes.push(objectNote);
+  setDataToStorage(keyLocal, data);
+};
+const initData = () => {
+  const isData = getDataFromStorage(keyLocal);
+  let data = null;
+  if (isData) {
+    data = isData;
+  } else {
+    const dataNotes = {
+      favoritesNotes: [],
+      regularNotes: []
+    };
+    setDataToStorage(keyLocal, dataNotes);
+    data = dataNotes;
+  }
+  return data;
+};
+const data = initData();
+
+;// CONCATENATED MODULE: ./src/utilities/render.js
+// 1. Добавить data в обьект заметок
+// 2. Отображать data в рендере
+// 3. HTML template element
+
+const clearRender = () => {
+  const isList = document.querySelector("#list");
+  if (isList) {
+    isList.innerHTML = "";
+  }
+};
+const render = arrNotes => {
+  let isList = document.querySelector("#list");
+  if (!isList) {
+    isList = document.createElement("ul");
+    isList.id = "list";
+    document.body.append(isList);
+  }
+  const listWrapper = document.createDocumentFragment();
+  arrNotes.forEach(note => {
+    console.log(note.date);
+    const template = document.createElement("li");
+    template.className = "my-4 max-w-4xl mx-auto";
+    const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
+    const dateString = note.date.substring(0, 10);
+    const timeString = note.date.substring(12, note.date.length);
+    const noteElement = `
+        <article class="border-2 border-cyan-600 rounded-md">
+            <div class="flex justify-between pl-2">
+                <div class="flex">
+                    <h2 class="text-2xl text-cyan-700 mr-4 font-semibold">${note.title}</h2>
+                    <p class="my-auto text-sm text-slate-500 font-semibold">Заметка создана ${dateString} в ${timeString}</p>
+                </div>
+                
+                <div class= "flex gap-2 pt-1 pr-2">
+                    <button class="${iconClass} w-6 h-6 bg-cover bg-no-repeat "></button>
+                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat"></button>
+                    <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat"></button>
+                </div>
+            </div>
+
+            <p class="pl-2">${note.textarea}</p>
+        </article>
+        `;
+    template.innerHTML = noteElement;
+    listWrapper.appendChild(template);
+  });
+  isList.appendChild(listWrapper);
+};
+
+;// CONCATENATED MODULE: ./src/modal/modal-params.js
+const fadeBlockParams = {
+  tagName: "div",
+  classList: ["w-screen", "h-screen", "bg-[#e2e8f046]", "backdrop-blur-sm", "absolute", "top-0", "left-0"]
+};
+const modalParams = {
+  tagName: "form",
+  classList: ["absolute", "bg-white", "max-w-[915px]", "w-full", "rounded-lg", "bottom-2/4", "right-2/4", "translate-x-2/4", "translate-y-2/4", "py-9", "px-7"],
+  attrParams: {
+    id: "form"
+  }
+};
+const headerModalParams = {
+  tagName: "div",
+  classList: ["flex", "max-w-[362px]", "gap-2", "border-b-2", "border-cyan-600", "mb-3"]
+};
+const inputTitleParams = {
+  tagName: "input",
+  classList: ["outline-none", "text-xl", "font-medium", "w-full"],
+  attrParams: {
+    type: "text",
+    placeholder: "Title",
+    name: "title"
+  }
+};
+const wrapperCheckboxParams = {
+  tagName: "label",
+  classList: ["cursor-pointer"]
+};
+const fakeCheckboxParams = {
+  tagName: "div",
+  classList: ["custom-checkbox"]
+};
+const checkboxParams = {
+  tagName: "input",
+  classList: ["real-checkbox"],
+  attrParams: {
+    type: "checkbox",
+    name: "checkbox"
+  }
+};
+const textareaParams = {
+  tagName: "textarea",
+  classList: ["outline-none", "resize-y", "w-full", "min-h-[250px]", "max-h-[350px]", "mb-4", "focus:shadow-xl", "text-lg"],
+  attrParams: {
+    placeholder: "Your note",
+    name: "textarea"
+  }
+};
+const wrapperElementParams = {
+  tagName: "div",
+  classList: ["flex", "gap-2", "justify-end"]
+};
+const buttonAddParams = {
+  tagName: "button",
+  classList: ["bg-cyan-600", "rounded-lg", "font-medium", "text-white", "px-4", "py-2", "min-w-[80px]"],
+  text: "Add"
+};
+const buttonCancelParams = {
+  tagName: "button",
+  classList: ["bg-red-800", "rounded-lg", "font-medium", "text-white", "px-4", "py-2", "min-w-[80px]"],
+  text: "Cancel"
+};
+
+;// CONCATENATED MODULE: ./src/modal/creator-modal.js
+
+
+
+
+const creatorModal = () => {
+  const containerApp = document.body;
+  const fadeBlockElement = creator(fadeBlockParams);
+  const modalElement = creator(modalParams);
+  const headerModalElement = creator(headerModalParams);
+  const inputTitle = creator(inputTitleParams);
+  const checkbox = creator(checkboxParams);
+  const textarea = creator(textareaParams);
+  const buttonAdd = creator(buttonAddParams);
+  const buttonCancel = creator(buttonCancelParams);
+  const wrapperElement = creator(wrapperElementParams);
+  const wrapperCheckbox = creator(wrapperCheckboxParams);
+  const fakeCheckbox = creator(fakeCheckboxParams);
+  modalElement.insertAdjacentElement("beforeend", headerModalElement);
+  modalElement.insertAdjacentElement("beforeend", textarea);
+  modalElement.insertAdjacentElement("beforeend", wrapperElement);
+  wrapperElement.insertAdjacentElement("beforeend", buttonCancel);
+  wrapperElement.insertAdjacentElement("beforeend", buttonAdd);
+  headerModalElement.insertAdjacentElement("beforeend", inputTitle);
+  headerModalElement.insertAdjacentElement("beforeend", wrapperCheckbox);
+  wrapperCheckbox.insertAdjacentElement("beforeend", checkbox);
+  wrapperCheckbox.insertAdjacentElement("beforeend", fakeCheckbox);
+  containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
+  containerApp.insertAdjacentElement("beforeend", modalElement);
+  modalElement.addEventListener("submit", event => {
+    formDataHandler(event, modalElement);
+    clearRender();
+    render(data.favoritesNotes);
+    render(data.regularNotes);
+    modalElement.remove();
+    fadeBlockElement.remove();
+  });
+  buttonCancel.addEventListener("click", () => {
+    modalElement.remove();
+    fadeBlockElement.remove();
+  });
+  fadeBlockElement.addEventListener("click", () => {
+    modalElement.remove();
+    fadeBlockElement.remove();
+  });
+};
+/* harmony default export */ const creator_modal = (creatorModal);
+;// CONCATENATED MODULE: ./src/button-add-note/create-button-add-note.js
+
+
+
+const createbuttonAddNote = () => {
+  const buttonElement = creator(buttonAddNoteParams);
+  const noteIconElement = creator(buttonAddNoteIconParams);
+  buttonElement.insertAdjacentElement("beforeend", noteIconElement);
+  buttonElement.addEventListener("click", creator_modal);
+  return buttonElement;
+};
+/* harmony default export */ const create_button_add_note = (createbuttonAddNote);
 ;// CONCATENATED MODULE: ./src/header/params/header-params.js
 const headerParams = {
   tagName: "header",
@@ -9016,7 +9256,7 @@ const headerParams = {
 };
 const mainTitleParams = {
   tagName: "h1",
-  classList: ["text-cyan-500", "text-2xl", "font-medium", "capitalize", "font-['Roboto_Slab']", "dark:text-white"],
+  classList: ["text-cyan-600", "text-2xl", "font-medium", "capitalize", "font-['Roboto_Slab']", "dark:text-white"],
   text: "to-do"
 };
 const nightBtnParams = {
@@ -9057,13 +9297,20 @@ const createHeader = () => {
 /* harmony default export */ const header_view = (createHeader);
 ;// CONCATENATED MODULE: ./src/utilities/init.js
 
+
+
+
 const initApp = () => {
   const containerApp = document.body;
   const header = header_view();
   containerApp.insertAdjacentElement("beforeend", header);
+  const buttonAddNote = create_button_add_note();
+  containerApp.insertAdjacentElement("beforeend", buttonAddNote);
+  clearRender();
+  render(data.favoritesNotes);
+  render(data.regularNotes);
 };
 /* harmony default export */ const init = (initApp);
-// export {containerApp}
 ;// CONCATENATED MODULE: ./src/index.js
 
 
