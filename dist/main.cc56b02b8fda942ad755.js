@@ -9035,6 +9035,9 @@ const getDataFromStorage = key => {
   const data = JSON.parse(localStorage.getItem(key));
   return data;
 };
+
+// Функцию для получения даты написать здесь
+
 const formDataHandler = (event, formElement) => {
   event.preventDefault();
   const formData = new FormData(formElement);
@@ -9043,6 +9046,8 @@ const formDataHandler = (event, formElement) => {
     title: formData.get("title"),
     textarea: formData.get("textarea"),
     checkbox: formData.get("checkbox")
+    // Создать свойсто хранения data
+    // Здесь нужно вызвать функцию
   };
   isFavorite ? data.favoritesNotes.push(objectNote) : data.regularNotes.push(objectNote);
   setDataToStorage(keyLocal, data);
@@ -9065,21 +9070,29 @@ const initData = () => {
 const data = initData();
 
 ;// CONCATENATED MODULE: ./src/utilities/render.js
-// 1. Параметр - массив заметок +
-// 2. Создать список, если его нет +
-// 3. Перебирать массив заметок и на каждом круге цикла создавать элемент
-// 4. Вставка элемента на страницу
+// 1. Добавить data в обьект заметок
+// 2. Отображать data в рендере
+// 3. HTML template element
 
+const clearRender = () => {
+  const isList = document.querySelector("#list");
+  if (isList) {
+    isList.innerHTML = "";
+  }
+};
 const render = arrNotes => {
   let isList = document.querySelector("#list");
   if (!isList) {
     isList = document.createElement("ul");
+    isList.id = "list";
     document.body.append(isList);
   }
+  const listWrapper = document.createDocumentFragment();
+  const template = document.createElement("li");
+  template.className = "my-4 max-w-4xl mx-auto";
   arrNotes.forEach(note => {
     const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
     const noteElement = `
-        <li class="my-4 max-w-4xl mx-auto">
         <article class="border-2 border-cyan-600 rounded-md">
             <div class="flex justify-between pl-2">
                 <div class="flex">
@@ -9096,14 +9109,13 @@ const render = arrNotes => {
 
             <p class="pl-2">${note.textarea}</p>
         </article>
-        </li>
         `;
-    isList.insertAdjacentHTML("beforeend", noteElement);
+    template.innerHTML = noteElement;
   });
+  listWrapper.appendChild(template);
+  isList.appendChild(listWrapper);
 };
-/* harmony default export */ const utilities_render = (render);
 
-// Заменить иконку star-gold
 ;// CONCATENATED MODULE: ./src/modal/modal-params.js
 const fadeBlockParams = {
   tagName: "div",
@@ -9199,7 +9211,9 @@ const creatorModal = () => {
   containerApp.insertAdjacentElement("beforeend", modalElement);
   modalElement.addEventListener("submit", event => {
     formDataHandler(event, modalElement);
-    utilities_render(data.favoritesNotes);
+    clearRender();
+    render(data.favoritesNotes);
+    render(data.regularNotes);
     modalElement.remove();
     fadeBlockElement.remove();
   });
@@ -9213,8 +9227,6 @@ const creatorModal = () => {
   });
 };
 /* harmony default export */ const creator_modal = (creatorModal);
-
-// Не создавать форму если она есть
 ;// CONCATENATED MODULE: ./src/button-add-note/create-button-add-note.js
 
 

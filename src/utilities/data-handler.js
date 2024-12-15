@@ -10,6 +10,18 @@ const getDataFromStorage = (key) => {
     return data;
 };
 
+const setDate = () => {
+    const currentDate = new Date();
+    return currentDate.toLocaleString("ru-RU", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+};
+
 const formDataHandler = (event, formElement) => {
     event.preventDefault();
     const formData = new FormData(formElement);
@@ -19,6 +31,7 @@ const formDataHandler = (event, formElement) => {
         title: formData.get("title"),
         textarea: formData.get("textarea"),
         checkbox: formData.get("checkbox"),
+        date: setDate(),
     };
 
     isFavorite
