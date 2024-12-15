@@ -21,16 +21,20 @@ const render = (arrNotes) => {
     const listWrapper = document.createDocumentFragment();
 
     arrNotes.forEach((note) => {
+        console.log(note.date);
+
         const template = document.createElement("li");
         template.className = "my-4 max-w-4xl mx-auto";
         const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
+        const dateString = note.date.substring(0, 10);
+        const timeString = note.date.substring(12, note.date.length);
 
         const noteElement = `
         <article class="border-2 border-cyan-600 rounded-md">
             <div class="flex justify-between pl-2">
                 <div class="flex">
                     <h2 class="text-2xl text-cyan-700 mr-4 font-semibold">${note.title}</h2>
-                    <p class="my-auto text-sm text-slate-500 font-semibold">Заметка создана 08.06.24 в 18:46</p>
+                    <p class="my-auto text-sm text-slate-500 font-semibold">Заметка создана ${dateString} в ${timeString}</p>
                 </div>
                 
                 <div class= "flex gap-2 pt-1 pr-2">
