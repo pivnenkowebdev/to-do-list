@@ -19,10 +19,10 @@ const render = (arrNotes) => {
     }
 
     const listWrapper = document.createDocumentFragment();
-    const template = document.createElement("li");
-    template.className = "my-4 max-w-4xl mx-auto";
 
     arrNotes.forEach((note) => {
+        const template = document.createElement("li");
+        template.className = "my-4 max-w-4xl mx-auto";
         const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
 
         const noteElement = `
@@ -44,9 +44,9 @@ const render = (arrNotes) => {
         </article>
         `;
         template.innerHTML = noteElement;
+        listWrapper.appendChild(template);
     });
 
-    listWrapper.appendChild(template);
     isList.appendChild(listWrapper);
 };
 
