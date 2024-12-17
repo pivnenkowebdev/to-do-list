@@ -30,21 +30,21 @@ const render = (arrNotes) => {
         const timeString = note.date.substring(12, note.date.length);
 
         const noteElement = `
-        <article class="border-2 border-cyan-600 rounded-md">
+        <article class="border-2 border-cyan-600 rounded-md dark:border-white">
             <div class="flex justify-between pl-2">
                 <div class="flex">
-                    <h2 class="text-2xl text-cyan-700 mr-4 font-semibold">${note.title}</h2>
-                    <p class="my-auto text-sm text-slate-500 font-semibold">Заметка создана ${dateString} в ${timeString}</p>
+                    <h2 class="text-2xl text-cyan-700 mr-4 font-semibold dark:text-cyan-500">${note.title}</h2>
+                    <p class="my-auto text-sm text-slate-500 font-semibold dark:text-white">Заметка создана ${dateString} в ${timeString}</p>
                 </div>
                 
                 <div class= "flex gap-2 pt-1 pr-2">
                     <button class="${iconClass} w-6 h-6 bg-cover bg-no-repeat "></button>
-                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat"></button>
-                    <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat"></button>
+                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/edit-btn-dark.svg')]"></button>
+                    <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/trash-btn-dark.svg')]"></button>
                 </div>
             </div>
 
-            <p class="pl-2">${note.textarea}</p>
+            <p class="pl-2 dark:text-white mb-1">${note.textarea}</p>
         </article>
         `;
         template.innerHTML = noteElement;

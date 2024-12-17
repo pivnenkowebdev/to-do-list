@@ -43,3 +43,7 @@ textarea::-webkit-resizer {
 .icon-star-btn {
     background-image: url("../img/star-btn.svg");
 }
+
+body.dark .icon-star-btn {
+    background-image: url("../img/star-btn-dark.svg");
+}

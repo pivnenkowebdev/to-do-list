@@ -9035,9 +9035,17 @@ const getDataFromStorage = key => {
   const data = JSON.parse(localStorage.getItem(key));
   return data;
 };
-
-// Функцию для получения даты написать здесь
-
+const setDate = () => {
+  const currentDate = new Date();
+  return currentDate.toLocaleString("ru-RU", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+};
 const formDataHandler = (event, formElement) => {
   event.preventDefault();
   const formData = new FormData(formElement);
@@ -9045,9 +9053,8 @@ const formDataHandler = (event, formElement) => {
   const objectNote = {
     title: formData.get("title"),
     textarea: formData.get("textarea"),
-    checkbox: formData.get("checkbox")
-    // Создать свойсто хранения data
-    // Здесь нужно вызвать функцию
+    checkbox: formData.get("checkbox"),
+    date: setDate()
   };
   isFavorite ? data.favoritesNotes.push(objectNote) : data.regularNotes.push(objectNote);
   setDataToStorage(keyLocal, data);
@@ -9088,22 +9095,25 @@ const render = arrNotes => {
     document.body.append(isList);
   }
   const listWrapper = document.createDocumentFragment();
-  const template = document.createElement("li");
-  template.className = "my-4 max-w-4xl mx-auto";
   arrNotes.forEach(note => {
+    console.log(note.date);
+    const template = document.createElement("li");
+    template.className = "my-4 max-w-4xl mx-auto";
     const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
+    const dateString = note.date.substring(0, 10);
+    const timeString = note.date.substring(12, note.date.length);
     const noteElement = `
         <article class="border-2 border-cyan-600 rounded-md">
             <div class="flex justify-between pl-2">
                 <div class="flex">
                     <h2 class="text-2xl text-cyan-700 mr-4 font-semibold">${note.title}</h2>
-                    <p class="my-auto text-sm text-slate-500 font-semibold">Заметка создана 08.06.24 в 18:46</p>
+                    <p class="my-auto text-sm text-slate-500 font-semibold">Заметка создана ${dateString} в ${timeString}</p>
                 </div>
                 
                 <div class= "flex gap-2 pt-1 pr-2">
                     <button class="${iconClass} w-6 h-6 bg-cover bg-no-repeat "></button>
-                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat"></button>
-                    <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat"></button>
+                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:text-white"></button>
+                    <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:text-white"></button>
                 </div>
             </div>
 
@@ -9111,8 +9121,8 @@ const render = arrNotes => {
         </article>
         `;
     template.innerHTML = noteElement;
+    listWrapper.appendChild(template);
   });
-  listWrapper.appendChild(template);
   isList.appendChild(listWrapper);
 };
 
@@ -9288,12 +9298,17 @@ const createHeader = () => {
 ;// CONCATENATED MODULE: ./src/utilities/init.js
 
 
+
+
 const initApp = () => {
   const containerApp = document.body;
   const header = header_view();
   containerApp.insertAdjacentElement("beforeend", header);
   const buttonAddNote = create_button_add_note();
   containerApp.insertAdjacentElement("beforeend", buttonAddNote);
+  clearRender();
+  render(data.favoritesNotes);
+  render(data.regularNotes);
 };
 /* harmony default export */ const init = (initApp);
 ;// CONCATENATED MODULE: ./src/index.js
