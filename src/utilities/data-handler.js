@@ -22,6 +22,16 @@ const setDate = () => {
     });
 };
 
+const setId = (statusNote) => {
+    let newId = null;
+    if (statusNote) {
+        newId = data.favoritesNotes.length + "favorite";
+    } else if (!statusNote) {
+        newId = data.regularNotes.length + "regular";
+    }
+    return newId;
+};
+
 const formDataHandler = (event, formElement) => {
     event.preventDefault();
     const formData = new FormData(formElement);
@@ -32,6 +42,7 @@ const formDataHandler = (event, formElement) => {
         textarea: formData.get("textarea"),
         checkbox: formData.get("checkbox"),
         date: setDate(),
+        id: setId(isFavorite),
     };
 
     isFavorite
