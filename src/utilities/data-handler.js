@@ -29,6 +29,8 @@ const setId = (statusNote) => {
     } else if (!statusNote) {
         newId = data.regularNotes.length + "regular";
     }
+    console.log(newId);
+
     return newId;
 };
 

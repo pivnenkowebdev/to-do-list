@@ -21,10 +21,10 @@ const render = (arrNotes) => {
     const listWrapper = document.createDocumentFragment();
 
     arrNotes.forEach((note) => {
-        console.log(note.date);
-
         const template = document.createElement("li");
         template.className = "my-4 max-w-4xl mx-auto";
+        template.id = note.id;
+
         const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
         const dateString = note.date.substring(0, 10);
         const timeString = note.date.substring(12, note.date.length);
@@ -34,7 +34,7 @@ const render = (arrNotes) => {
             <div class="flex justify-between pl-2">
                 <div class="flex">
                     <h2 class="text-2xl text-cyan-700 mr-4 font-semibold dark:text-cyan-500">${note.title}</h2>
-                    <p class="my-auto text-sm text-slate-500 font-semibold dark:text-white">Заметка создана ${dateString} в ${timeString}</p>
+                    <p class="my-auto text-sm text-slate-500 font-semibold dark:text-white" id="date">Заметка создана ${dateString} в ${timeString}</p>
                 </div>
                 
                 <div class= "flex gap-2 pt-1 pr-2">
@@ -49,6 +49,9 @@ const render = (arrNotes) => {
         `;
         template.innerHTML = noteElement;
         listWrapper.appendChild(template);
+        // date.addEventListener("click", () => {
+        //     date.endWith("favorite")
+        // });
     });
 
     isList.appendChild(listWrapper);

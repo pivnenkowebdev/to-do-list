@@ -9046,6 +9046,15 @@ const setDate = () => {
     minute: "2-digit"
   });
 };
+const setId = statusNote => {
+  let newId = null;
+  if (statusNote) {
+    newId = data.favoritesNotes.length + "favorite";
+  } else if (!statusNote) {
+    newId = data.regularNotes.length + "regular";
+  }
+  return newId;
+};
 const formDataHandler = (event, formElement) => {
   event.preventDefault();
   const formData = new FormData(formElement);
@@ -9054,7 +9063,8 @@ const formDataHandler = (event, formElement) => {
     title: formData.get("title"),
     textarea: formData.get("textarea"),
     checkbox: formData.get("checkbox"),
-    date: setDate()
+    date: setDate(),
+    id: setId(isFavorite)
   };
   isFavorite ? data.favoritesNotes.push(objectNote) : data.regularNotes.push(objectNote);
   setDataToStorage(keyLocal, data);
@@ -9081,6 +9091,7 @@ const data = initData();
 // 2. Отображать data в рендере
 // 3. HTML template element
 
+
 const clearRender = () => {
   const isList = document.querySelector("#list");
   if (isList) {
@@ -9096,32 +9107,37 @@ const render = arrNotes => {
   }
   const listWrapper = document.createDocumentFragment();
   arrNotes.forEach(note => {
-    console.log(note.date);
+    console.log(note);
+    const noteId = setId(note.checkbox);
     const template = document.createElement("li");
     template.className = "my-4 max-w-4xl mx-auto";
+    template.id = noteId;
     const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
     const dateString = note.date.substring(0, 10);
     const timeString = note.date.substring(12, note.date.length);
     const noteElement = `
-        <article class="border-2 border-cyan-600 rounded-md">
+        <article class="border-2 border-cyan-600 rounded-md dark:border-white">
             <div class="flex justify-between pl-2">
                 <div class="flex">
-                    <h2 class="text-2xl text-cyan-700 mr-4 font-semibold">${note.title}</h2>
-                    <p class="my-auto text-sm text-slate-500 font-semibold">Заметка создана ${dateString} в ${timeString}</p>
+                    <h2 class="text-2xl text-cyan-700 mr-4 font-semibold dark:text-cyan-500">${note.title}</h2>
+                    <p class="my-auto text-sm text-slate-500 font-semibold dark:text-white" id="date">Заметка создана ${dateString} в ${timeString}</p>
                 </div>
                 
                 <div class= "flex gap-2 pt-1 pr-2">
                     <button class="${iconClass} w-6 h-6 bg-cover bg-no-repeat "></button>
-                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:text-white"></button>
-                    <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:text-white"></button>
+                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/edit-btn-dark.svg')]"></button>
+                    <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/trash-btn-dark.svg')]"></button>
                 </div>
             </div>
 
-            <p class="pl-2">${note.textarea}</p>
+            <p class="pl-2 dark:text-white mb-1">${note.textarea}</p>
         </article>
         `;
     template.innerHTML = noteElement;
     listWrapper.appendChild(template);
+    // date.addEventListener("click", () => {
+    //     date.endWith("favorite")
+    // });
   });
   isList.appendChild(listWrapper);
 };
