@@ -23,14 +23,13 @@ const setDate = () => {
 };
 
 const setId = (statusNote) => {
+    1;
     let newId = null;
     if (statusNote) {
         newId = data.favoritesNotes.length + "favorite";
     } else if (!statusNote) {
         newId = data.regularNotes.length + "regular";
     }
-    console.log(newId);
-
     return newId;
 };
 
@@ -80,14 +79,25 @@ const initData = () => {
 //     });
 // };
 
+const decreaseId = (index, array, mode) => {
+    for (let i = index; i < array.length; i++) {
+        array[i].id = parseInt(array[i].id) - 1 + mode;
+    }
+};
+
 const removeNote = (id) => {
     const isFavoriteId = id.endsWith("favorite");
 
-    const currentArray = isFavoriteId ? data.favoritesNotes : data.regularNotes;
+    const [currentArray, arrayMode] = isFavoriteId
+        ? [data.favoritesNotes, "favorite"]
+        : [data.regularNotes, "regular"];
 
-    const currentId = currentArray.findIndex((el) => el.id == id);
+    const currentIndex = currentArray.findIndex((el) => el.id == id);
 
-    currentArray.splice(currentId, 1);
+    currentArray.splice(currentIndex, 1);
+
+    decreaseId(currentIndex, currentArray, arrayMode);
+
     setDataToStorage(keyLocal, data);
 };
 

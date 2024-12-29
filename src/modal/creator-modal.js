@@ -44,6 +44,8 @@ const creatorModal = () => {
     containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
     containerApp.insertAdjacentElement("beforeend", modalElement);
 
+    buttonAdd.focus();
+
     modalElement.addEventListener("submit", (event) => {
         formDataHandler(event, modalElement);
         clearRender();
