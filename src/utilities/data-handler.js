@@ -69,6 +69,28 @@ const initData = () => {
     return data;
 };
 
+// const findNoteObject = (id) => {
+//     const isFavoriteId = id.endsWith("favorite");
+//     const currentArray = isFavoriteId ? data.favoritesNotes : data.regularNotes;
+
+//     currentArray.forEach((element) => {
+//         if (id === element.id) {
+//             return element;
+//         }
+//     });
+// };
+
+const removeNote = (id) => {
+    const isFavoriteId = id.endsWith("favorite");
+
+    const currentArray = isFavoriteId ? data.favoritesNotes : data.regularNotes;
+
+    const currentId = currentArray.findIndex((el) => el.id == id);
+
+    currentArray.splice(currentId, 1);
+    setDataToStorage(keyLocal, data);
+};
+
 const data = initData();
 
-export { data, formDataHandler };
+export { data, formDataHandler, removeNote };

@@ -1,6 +1,4 @@
-// 1. Добавить data в обьект заметок
-// 2. Отображать data в рендере
-// 3. HTML template element
+import { data, removeNote } from "./data-handler.js";
 
 const clearRender = () => {
     const isList = document.querySelector("#list");
@@ -10,11 +8,24 @@ const clearRender = () => {
     }
 };
 
+const eventHandler = (e) => {
+    const isTrashButton = e.target.closest("[data-btn-remove]");
+
+    if (isTrashButton) {
+        const idFromNote = e.target.closest("[data-note-item]").id;
+        removeNote(idFromNote);
+        clearRender();
+        render(data.favoritesNotes);
+        render(data.regularNotes);
+    }
+};
+
 const render = (arrNotes) => {
     let isList = document.querySelector("#list");
     if (!isList) {
         isList = document.createElement("ul");
         isList.id = "list";
+        isList.addEventListener("click", (e) => eventHandler(e));
         document.body.append(isList);
     }
 
@@ -24,6 +35,7 @@ const render = (arrNotes) => {
         const template = document.createElement("li");
         template.className = "my-4 max-w-4xl mx-auto";
         template.id = note.id;
+        template.setAttribute("data-note-item", "");
 
         const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
         const dateString = note.date.substring(0, 10);
@@ -34,13 +46,13 @@ const render = (arrNotes) => {
             <div class="flex justify-between pl-2">
                 <div class="flex">
                     <h2 class="text-2xl text-cyan-700 mr-4 font-semibold dark:text-cyan-500">${note.title}</h2>
-                    <p class="my-auto text-sm text-slate-500 font-semibold dark:text-white" id="date">Заметка создана ${dateString} в ${timeString}</p>
+                    <p class="my-auto text-sm text-slate-500 font-semibold dark:text-white">Заметка создана ${dateString} в ${timeString}</p>
                 </div>
                 
                 <div class= "flex gap-2 pt-1 pr-2">
                     <button class="${iconClass} w-6 h-6 bg-cover bg-no-repeat "></button>
                     <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/edit-btn-dark.svg')]"></button>
-                    <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/trash-btn-dark.svg')]"></button>
+                    <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/trash-btn-dark.svg')]" data-btn-remove></button>
                 </div>
             </div>
 
@@ -49,9 +61,6 @@ const render = (arrNotes) => {
         `;
         template.innerHTML = noteElement;
         listWrapper.appendChild(template);
-        // date.addEventListener("click", () => {
-        //     date.endWith("favorite")
-        // });
     });
 
     isList.appendChild(listWrapper);
