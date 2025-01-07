@@ -1,4 +1,5 @@
-import { data, removeNote } from "./data-handler.js";
+import creatorModal from "../modal/creator-modal.js";
+import { data, findNoteObject, removeNote } from "./data-handler.js";
 
 const clearRender = () => {
     const isList = document.querySelector("#list");
@@ -10,6 +11,7 @@ const clearRender = () => {
 
 const eventHandler = (e) => {
     const isTrashButton = e.target.closest("[data-btn-remove]");
+    const isEditBtn = e.target.closest("[data-btn-edit]");
 
     if (isTrashButton) {
         const idFromNote = e.target.closest("[data-note-item]").id;
@@ -17,6 +19,9 @@ const eventHandler = (e) => {
         clearRender();
         render(data.favoritesNotes);
         render(data.regularNotes);
+    } else if (isEditBtn) {
+        const idFromNote = e.target.closest("[data-note-item]").id;
+        creatorModal(true, findNoteObject(idFromNote));
     }
 };
 
@@ -51,7 +56,7 @@ const render = (arrNotes) => {
                 
                 <div class= "flex gap-2 pt-1 pr-2">
                     <button class="${iconClass} w-6 h-6 bg-cover bg-no-repeat "></button>
-                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/edit-btn-dark.svg')]"></button>
+                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/edit-btn-dark.svg')]" data-btn-edit></button>
                     <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/trash-btn-dark.svg')]" data-btn-remove></button>
                 </div>
             </div>

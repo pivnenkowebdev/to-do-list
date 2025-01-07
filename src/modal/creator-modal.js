@@ -4,6 +4,7 @@ import { render, clearRender } from "../utilities/render.js";
 import {
     buttonAddParams,
     buttonCancelParams,
+    buttonEditParams,
     checkboxParams,
     fadeBlockParams,
     fakeCheckboxParams,
@@ -15,15 +16,31 @@ import {
     wrapperElementParams,
 } from "./modal-params.js";
 
-const creatorModal = () => {
+const creatorModal = (status, noteInfo = {}) => {
     const containerApp = document.body;
     const fadeBlockElement = createElement(fadeBlockParams);
     const modalElement = createElement(modalParams);
     const headerModalElement = createElement(headerModalParams);
-    const inputTitle = createElement(inputTitleParams);
+    let inputTitle = null;
+
+    if (noteInfo.title) {
+        const updateInputTitleParams = inputTitleParams;
+        updateInputTitleParams.value = noteInfo.title;
+        inputTitle = createElement(updateInputTitleParams);
+    } else {
+        inputTitle = createElement(inputTitleParams);
+    }
+
     const checkbox = createElement(checkboxParams);
     const textarea = createElement(textareaParams);
-    const buttonAdd = createElement(buttonAddParams);
+    let buttonAction = null;
+
+    if (status) {
+        buttonAction = createElement(buttonEditParams);
+    } else {
+        buttonAction = createElement(buttonAddParams);
+    }
+
     const buttonCancel = createElement(buttonCancelParams);
     const wrapperElement = createElement(wrapperElementParams);
     const wrapperCheckbox = createElement(wrapperCheckboxParams);
@@ -34,7 +51,7 @@ const creatorModal = () => {
     modalElement.insertAdjacentElement("beforeend", wrapperElement);
 
     wrapperElement.insertAdjacentElement("beforeend", buttonCancel);
-    wrapperElement.insertAdjacentElement("beforeend", buttonAdd);
+    wrapperElement.insertAdjacentElement("beforeend", buttonAction);
 
     headerModalElement.insertAdjacentElement("beforeend", inputTitle);
     headerModalElement.insertAdjacentElement("beforeend", wrapperCheckbox);
@@ -44,9 +61,10 @@ const creatorModal = () => {
     containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
     containerApp.insertAdjacentElement("beforeend", modalElement);
 
-    buttonAdd.focus();
+    inputTitle.focus();
 
     modalElement.addEventListener("submit", (event) => {
+        event.preventDefault();
         formDataHandler(event, modalElement);
         clearRender();
         render(data.favoritesNotes);

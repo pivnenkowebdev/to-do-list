@@ -9047,17 +9047,17 @@ const setDate = () => {
   });
 };
 const setId = statusNote => {
+  1;
   let newId = null;
   if (statusNote) {
     newId = data.favoritesNotes.length + "favorite";
   } else if (!statusNote) {
     newId = data.regularNotes.length + "regular";
   }
-  console.log(newId);
   return newId;
 };
 const formDataHandler = (event, formElement) => {
-  event.preventDefault();
+  // event.preventDefault();
   const formData = new FormData(formElement);
   const isFavorite = formData.get("checkbox");
   const objectNote = {
@@ -9085,26 +9085,63 @@ const initData = () => {
   }
   return data;
 };
+const findNoteObject = id => {
+  const isFavoriteId = id.endsWith("favorite");
+  const currentArray = isFavoriteId ? data.favoritesNotes : data.regularNotes;
+  currentArray.forEach(element => {
+    if (id === element.id) {
+      console.log(element);
+      return element;
+    }
+  });
+};
+const decreaseId = (index, array, mode) => {
+  for (let i = index; i < array.length; i++) {
+    array[i].id = parseInt(array[i].id) - 1 + mode;
+  }
+};
+const removeNote = id => {
+  const isFavoriteId = id.endsWith("favorite");
+  const [currentArray, arrayMode] = isFavoriteId ? [data.favoritesNotes, "favorite"] : [data.regularNotes, "regular"];
+  const currentIndex = currentArray.findIndex(el => el.id == id);
+  currentArray.splice(currentIndex, 1);
+  decreaseId(currentIndex, currentArray, arrayMode);
+  setDataToStorage(keyLocal, data);
+};
 const data = initData();
 
 ;// CONCATENATED MODULE: ./src/utilities/render.js
+
+
 const clearRender = () => {
   const isList = document.querySelector("#list");
   if (isList) {
     isList.innerHTML = "";
   }
 };
-const getIdFromNote = e => {
-  const idFromNote = e.target.closest("[data-note-item]");
-  // От кнопки найти li, но так, что бы не повторять условия в будущем
-  console.log(idFromNote);
+const eventHandler = e => {
+  const isTrashButton = e.target.closest("[data-btn-remove]");
+  const isEditBtn = e.target.closest("[data-btn-edit]");
+  if (isTrashButton) {
+    const idFromNote = e.target.closest("[data-note-item]").id;
+    removeNote(idFromNote);
+    clearRender();
+    render(data.favoritesNotes);
+    render(data.regularNotes);
+  } else if (isEditBtn) {
+    const idFromNote = e.target.closest("[data-note-item]").id;
+
+    // Сделать композицию функций
+    findNoteObject(idFromNote);
+    creator_modal(true);
+  }
 };
 const render = arrNotes => {
   let isList = document.querySelector("#list");
   if (!isList) {
     isList = document.createElement("ul");
     isList.id = "list";
-    isList.addEventListener("click", getIdFromNote);
+    isList.addEventListener("click", e => eventHandler(e));
     document.body.append(isList);
   }
   const listWrapper = document.createDocumentFragment();
@@ -9126,7 +9163,7 @@ const render = arrNotes => {
                 
                 <div class= "flex gap-2 pt-1 pr-2">
                     <button class="${iconClass} w-6 h-6 bg-cover bg-no-repeat "></button>
-                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/edit-btn-dark.svg')]"></button>
+                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/edit-btn-dark.svg')]" data-btn-edit></button>
                     <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/trash-btn-dark.svg')]" data-btn-remove></button>
                 </div>
             </div>
@@ -9198,6 +9235,11 @@ const buttonAddParams = {
   classList: ["bg-cyan-600", "rounded-lg", "font-medium", "text-white", "px-4", "py-2", "min-w-[80px]"],
   text: "Add"
 };
+const buttonEditParams = {
+  tagName: "button",
+  classList: ["bg-cyan-600", "rounded-lg", "font-medium", "text-white", "px-4", "py-2", "min-w-[80px]"],
+  text: "Edit"
+};
 const buttonCancelParams = {
   tagName: "button",
   classList: ["bg-red-800", "rounded-lg", "font-medium", "text-white", "px-4", "py-2", "min-w-[80px]"],
@@ -9209,7 +9251,7 @@ const buttonCancelParams = {
 
 
 
-const creatorModal = () => {
+const creatorModal = status => {
   const containerApp = document.body;
   const fadeBlockElement = creator(fadeBlockParams);
   const modalElement = creator(modalParams);
@@ -9217,7 +9259,12 @@ const creatorModal = () => {
   const inputTitle = creator(inputTitleParams);
   const checkbox = creator(checkboxParams);
   const textarea = creator(textareaParams);
-  const buttonAdd = creator(buttonAddParams);
+  let buttonAction = null;
+  if (status) {
+    buttonAction = creator(buttonEditParams);
+  } else {
+    buttonAction = creator(buttonAddParams);
+  }
   const buttonCancel = creator(buttonCancelParams);
   const wrapperElement = creator(wrapperElementParams);
   const wrapperCheckbox = creator(wrapperCheckboxParams);
@@ -9226,14 +9273,16 @@ const creatorModal = () => {
   modalElement.insertAdjacentElement("beforeend", textarea);
   modalElement.insertAdjacentElement("beforeend", wrapperElement);
   wrapperElement.insertAdjacentElement("beforeend", buttonCancel);
-  wrapperElement.insertAdjacentElement("beforeend", buttonAdd);
+  wrapperElement.insertAdjacentElement("beforeend", buttonAction);
   headerModalElement.insertAdjacentElement("beforeend", inputTitle);
   headerModalElement.insertAdjacentElement("beforeend", wrapperCheckbox);
   wrapperCheckbox.insertAdjacentElement("beforeend", checkbox);
   wrapperCheckbox.insertAdjacentElement("beforeend", fakeCheckbox);
   containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
   containerApp.insertAdjacentElement("beforeend", modalElement);
+  inputTitle.focus();
   modalElement.addEventListener("submit", event => {
+    event.preventDefault();
     formDataHandler(event, modalElement);
     clearRender();
     render(data.favoritesNotes);
@@ -9259,7 +9308,10 @@ const createbuttonAddNote = () => {
   const buttonElement = creator(buttonAddNoteParams);
   const noteIconElement = creator(buttonAddNoteIconParams);
   buttonElement.insertAdjacentElement("beforeend", noteIconElement);
-  buttonElement.addEventListener("click", creator_modal);
+  const isEdit = false;
+  buttonElement.addEventListener("click", () => {
+    creator_modal(isEdit);
+  });
   return buttonElement;
 };
 /* harmony default export */ const create_button_add_note = (createbuttonAddNote);

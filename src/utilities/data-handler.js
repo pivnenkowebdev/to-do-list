@@ -34,7 +34,7 @@ const setId = (statusNote) => {
 };
 
 const formDataHandler = (event, formElement) => {
-    event.preventDefault();
+    // event.preventDefault();
     const formData = new FormData(formElement);
     const isFavorite = formData.get("checkbox");
 
@@ -68,16 +68,18 @@ const initData = () => {
     return data;
 };
 
-// const findNoteObject = (id) => {
-//     const isFavoriteId = id.endsWith("favorite");
-//     const currentArray = isFavoriteId ? data.favoritesNotes : data.regularNotes;
-
-//     currentArray.forEach((element) => {
-//         if (id === element.id) {
-//             return element;
-//         }
-//     });
-// };
+const findNoteObject = (id) => {
+    const isFavoriteId = id.endsWith("favorite");
+    const currentArray = isFavoriteId ? data.favoritesNotes : data.regularNotes;
+    let currentNoteObject = null;
+    currentArray.forEach((element) => {
+        if (id === element.id) {
+            // console.log(element);
+            currentNoteObject = element;
+        }
+    });
+    return currentNoteObject;
+};
 
 const decreaseId = (index, array, mode) => {
     for (let i = index; i < array.length; i++) {
@@ -103,4 +105,4 @@ const removeNote = (id) => {
 
 const data = initData();
 
-export { data, formDataHandler, removeNote };
+export { data, formDataHandler, removeNote, findNoteObject };

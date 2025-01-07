@@ -13,6 +13,10 @@ const createElement = (elementParams) => {
         }
     }
 
+    if (elementParams.value) {
+        tagElement.value = elementParams.value;
+    }
+
     return tagElement;
 };
 
