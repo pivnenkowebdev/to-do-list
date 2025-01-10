@@ -22,6 +22,8 @@ const creatorModal = (status, noteInfo = {}) => {
     const modalElement = createElement(modalParams);
     const headerModalElement = createElement(headerModalParams);
     let inputTitle = null;
+    let textarea = null;
+    let checkbox = null;
 
     if (noteInfo.title) {
         const updateInputTitleParams = inputTitleParams;
@@ -31,8 +33,26 @@ const creatorModal = (status, noteInfo = {}) => {
         inputTitle = createElement(inputTitleParams);
     }
 
-    const checkbox = createElement(checkboxParams);
-    const textarea = createElement(textareaParams);
+    if (noteInfo.textarea) {
+        const updateTextareaParams = textareaParams;
+        updateTextareaParams.value = noteInfo.textarea;
+        textarea = createElement(updateTextareaParams);
+    } else {
+        textarea = createElement(textareaParams);
+    }
+
+    if (noteInfo.checkbox) {
+        console.log(noteInfo.checkbox);
+
+        const updateCheckboxParams = checkboxParams;
+        updateCheckboxParams.attrParams.checked = noteInfo.checkbox;
+        checkbox = createElement(updateCheckboxParams);
+    } else {
+        const regularParamsCheckbox = checkboxParams;
+        delete regularParamsCheckbox.attrParams.checked;
+        checkbox = createElement(regularParamsCheckbox);
+    }
+
     let buttonAction = null;
 
     if (status) {
@@ -63,6 +83,8 @@ const creatorModal = (status, noteInfo = {}) => {
 
     inputTitle.focus();
 
+    // 1. Получить статус заметки и прописать условие для закрытия окна
+    // 1.1. Проверить изменены данные, или нет
     modalElement.addEventListener("submit", (event) => {
         event.preventDefault();
         formDataHandler(event, modalElement);
@@ -85,3 +107,5 @@ const creatorModal = (status, noteInfo = {}) => {
 };
 
 export default creatorModal;
+// 1. Очистка старых данных из модалки
+// 2. Правка на калвишу enter

@@ -34,11 +34,11 @@ const setId = (statusNote) => {
 };
 
 const formDataHandler = (event, formElement) => {
-    // event.preventDefault();
     const formData = new FormData(formElement);
     const isFavorite = formData.get("checkbox");
 
     const objectNote = {
+        isChanged: false,
         title: formData.get("title"),
         textarea: formData.get("textarea"),
         checkbox: formData.get("checkbox"),
@@ -74,7 +74,6 @@ const findNoteObject = (id) => {
     let currentNoteObject = null;
     currentArray.forEach((element) => {
         if (id === element.id) {
-            // console.log(element);
             currentNoteObject = element;
         }
     });
@@ -106,3 +105,5 @@ const removeNote = (id) => {
 const data = initData();
 
 export { data, formDataHandler, removeNote, findNoteObject };
+// 1. Если данные в полях не изменены, заметку не отправлять
+// 1.1. Проверить что форма в состоянии изменения(кнопка edit/статусная переменная)

@@ -9011,6 +9011,9 @@ const createElement = elementParams => {
       tagElement.setAttribute(key, elementParams.attrParams[key]);
     }
   }
+  if (elementParams.value) {
+    tagElement.value = elementParams.value;
+  }
   return tagElement;
 };
 /* harmony default export */ const creator = (createElement);
@@ -9088,12 +9091,14 @@ const initData = () => {
 const findNoteObject = id => {
   const isFavoriteId = id.endsWith("favorite");
   const currentArray = isFavoriteId ? data.favoritesNotes : data.regularNotes;
+  let currentNoteObject = null;
   currentArray.forEach(element => {
     if (id === element.id) {
-      console.log(element);
-      return element;
+      // console.log(element);
+      currentNoteObject = element;
     }
   });
+  return currentNoteObject;
 };
 const decreaseId = (index, array, mode) => {
   for (let i = index; i < array.length; i++) {
@@ -9130,10 +9135,7 @@ const eventHandler = e => {
     render(data.regularNotes);
   } else if (isEditBtn) {
     const idFromNote = e.target.closest("[data-note-item]").id;
-
-    // Сделать композицию функций
-    findNoteObject(idFromNote);
-    creator_modal(true);
+    creator_modal(true, findNoteObject(idFromNote));
   }
 };
 const render = arrNotes => {
@@ -9200,7 +9202,8 @@ const inputTitleParams = {
     type: "text",
     placeholder: "Title",
     name: "title"
-  }
+  },
+  value: ""
 };
 const wrapperCheckboxParams = {
   tagName: "label",
@@ -9251,19 +9254,31 @@ const buttonCancelParams = {
 
 
 
-const creatorModal = status => {
+const creatorModal = function (status) {
+  let noteInfo = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   const containerApp = document.body;
   const fadeBlockElement = creator(fadeBlockParams);
   const modalElement = creator(modalParams);
   const headerModalElement = creator(headerModalParams);
-  const inputTitle = creator(inputTitleParams);
+  let inputTitle = null;
+  if (noteInfo.title) {
+    const updateInputTitleParams = inputTitleParams;
+    updateInputTitleParams.value = noteInfo.title;
+    inputTitle = creator(updateInputTitleParams);
+  } else {
+    inputTitle = creator(inputTitleParams);
+  }
   const checkbox = creator(checkboxParams);
   const textarea = creator(textareaParams);
   let buttonAction = null;
   if (status) {
     buttonAction = creator(buttonEditParams);
+    console.log(status);
+    console.log(noteInfo);
   } else {
     buttonAction = creator(buttonAddParams);
+    console.log(status);
+    console.log(noteInfo);
   }
   const buttonCancel = creator(buttonCancelParams);
   const wrapperElement = creator(wrapperElementParams);
