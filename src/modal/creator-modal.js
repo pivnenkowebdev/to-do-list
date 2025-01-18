@@ -20,7 +20,11 @@ const creatorModal = (status, noteInfo = {}) => {
     const containerApp = document.body;
     const fadeBlockElement = createElement(fadeBlockParams);
     const modalElement = createElement(modalParams);
-    modalElement.setAttribute("data-id", noteInfo.id);
+
+    if (noteInfo.id) {
+        modalElement.setAttribute("data-id", noteInfo.id);
+    }
+
     const headerModalElement = createElement(headerModalParams);
     let inputTitle = null;
     let textarea = null;
@@ -84,6 +88,8 @@ const creatorModal = (status, noteInfo = {}) => {
 
     // 1. Получить статус заметки и прописать условие для закрытия окна
     // 1.1. Проверить изменены данные, или нет
+
+    // в первый раз получаю пустую id из элемента формы
     modalElement.addEventListener("submit", (event) => {
         event.preventDefault();
         formDataHandler(event, modalElement);

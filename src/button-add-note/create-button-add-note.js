@@ -13,6 +13,8 @@ const createbuttonAddNote = () => {
 
     const isEdit = false;
     buttonElement.addEventListener("click", () => {
+        // передача статуса в в модалку чтобы отображать нужную кнопку
+        // add или edit
         createModal(isEdit);
     });
 

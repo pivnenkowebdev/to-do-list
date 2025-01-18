@@ -20,10 +20,13 @@ const eventHandler = (e) => {
         render(data.favoritesNotes);
         render(data.regularNotes);
     } else if (isEditBtn) {
-        const idFromNote = e.target.closest("[data-note-item]").id;
-        console.log(idFromNote);
+        // передача статуса в в модалку чтобы отображать нужную кнопку
+        // add или edit
+        const isEdit = true;
 
-        creatorModal(true, findNoteObject(idFromNote));
+        // поиск объекта старой заметки и передача его в модалку
+        const idFromNote = e.target.closest("[data-note-item]").id;
+        creatorModal(isEdit, findNoteObject(idFromNote));
     }
 };
 
@@ -41,7 +44,9 @@ const render = (arrNotes) => {
     arrNotes.forEach((note) => {
         const template = document.createElement("li");
         template.className = "my-4 max-w-4xl mx-auto";
-        template.id = note.id;
+        if (note.id) {
+            template.id = note.id;
+        }
         template.setAttribute("data-note-item", "");
 
         const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
@@ -55,7 +60,6 @@ const render = (arrNotes) => {
                     <h2 class="text-2xl text-cyan-700 mr-4 font-semibold dark:text-cyan-500">${note.title}</h2>
                     <p class="my-auto text-sm text-slate-500 font-semibold dark:text-white">Заметка создана ${dateString} в ${timeString}</p>
                 </div>
-                
                 <div class= "flex gap-2 pt-1 pr-2">
                     <button class="${iconClass} w-6 h-6 bg-cover bg-no-repeat "></button>
                     <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/edit-btn-dark.svg')]" data-btn-edit></button>

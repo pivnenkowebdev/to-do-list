@@ -9072,15 +9072,16 @@ const formDataHandler = (event, formElement) => {
   console.log(status);
   console.log(objectNote);
   console.log(findNoteObject(formId));
+  console.log(formId);
   if (status) {
     // Окно должно не закрываться
-    alert('Внесите изменения');
+    alert("Внесите изменения");
   } else {
+    removeNote(formId);
     objectNote.date = setDate();
     objectNote.id = setId(isFavorite);
     isFavorite ? data.favoritesNotes.push(objectNote) : data.regularNotes.push(objectNote);
     setDataToStorage(keyLocal, data);
-    removeNote(formId);
   }
 };
 const checkChange = (newNote, oldNote) => {
@@ -9120,15 +9121,14 @@ const decreaseId = (index, array, mode) => {
   }
 };
 const removeNote = id => {
-  if (!id) {
-    return;
+  if (id) {
+    const isFavoriteId = id.endsWith("favorite");
+    const [currentArray, arrayMode] = isFavoriteId ? [data.favoritesNotes, "favorite"] : [data.regularNotes, "regular"];
+    const currentIndex = currentArray.findIndex(el => el.id == id);
+    currentArray.splice(currentIndex, 1);
+    decreaseId(currentIndex, currentArray, arrayMode);
+    setDataToStorage(keyLocal, data);
   }
-  const isFavoriteId = id.endsWith("favorite");
-  const [currentArray, arrayMode] = isFavoriteId ? [data.favoritesNotes, "favorite"] : [data.regularNotes, "regular"];
-  const currentIndex = currentArray.findIndex(el => el.id == id);
-  currentArray.splice(currentIndex, 1);
-  decreaseId(currentIndex, currentArray, arrayMode);
-  setDataToStorage(keyLocal, data);
 };
 const data = initData();
 
@@ -9154,6 +9154,7 @@ const eventHandler = e => {
     render(data.regularNotes);
   } else if (isEditBtn) {
     const idFromNote = e.target.closest("[data-note-item]").id;
+    console.log(idFromNote);
     creator_modal(true, findNoteObject(idFromNote));
   }
 };
