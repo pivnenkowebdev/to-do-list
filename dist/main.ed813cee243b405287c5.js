@@ -9050,7 +9050,6 @@ const setDate = () => {
   });
 };
 const setId = statusNote => {
-  1;
   let newId = null;
   if (statusNote) {
     newId = data.favoritesNotes.length + "favorite";
@@ -9060,18 +9059,34 @@ const setId = statusNote => {
   return newId;
 };
 const formDataHandler = (event, formElement) => {
-  // event.preventDefault();
   const formData = new FormData(formElement);
   const isFavorite = formData.get("checkbox");
+  const formId = formElement.dataset.id;
   const objectNote = {
+    isChanged: false,
     title: formData.get("title"),
     textarea: formData.get("textarea"),
-    checkbox: formData.get("checkbox"),
-    date: setDate(),
-    id: setId(isFavorite)
+    checkbox: formData.get("checkbox")
   };
-  isFavorite ? data.favoritesNotes.push(objectNote) : data.regularNotes.push(objectNote);
-  setDataToStorage(keyLocal, data);
+  const status = checkChange(objectNote, findNoteObject(formId));
+  console.log(status);
+  console.log(objectNote);
+  console.log(findNoteObject(formId));
+  if (status) {
+    // Окно должно не закрываться
+    alert('Внесите изменения');
+  } else {
+    objectNote.date = setDate();
+    objectNote.id = setId(isFavorite);
+    isFavorite ? data.favoritesNotes.push(objectNote) : data.regularNotes.push(objectNote);
+    setDataToStorage(keyLocal, data);
+    removeNote(formId);
+  }
+};
+const checkChange = (newNote, oldNote) => {
+  // console.log(newNote, oldNote);
+  const status = JSON.stringify(newNote) === JSON.stringify(oldNote);
+  return status;
 };
 const initData = () => {
   const isData = getDataFromStorage(keyLocal);
@@ -9094,7 +9109,6 @@ const findNoteObject = id => {
   let currentNoteObject = null;
   currentArray.forEach(element => {
     if (id === element.id) {
-      // console.log(element);
       currentNoteObject = element;
     }
   });
@@ -9106,6 +9120,9 @@ const decreaseId = (index, array, mode) => {
   }
 };
 const removeNote = id => {
+  if (!id) {
+    return;
+  }
   const isFavoriteId = id.endsWith("favorite");
   const [currentArray, arrayMode] = isFavoriteId ? [data.favoritesNotes, "favorite"] : [data.regularNotes, "regular"];
   const currentIndex = currentArray.findIndex(el => el.id == id);
@@ -9115,6 +9132,8 @@ const removeNote = id => {
 };
 const data = initData();
 
+// 1. Если данные в полях не изменены, заметку не отправлять
+// 1.1. Проверить что форма в состоянии изменения(кнопка edit/статусная переменная)
 ;// CONCATENATED MODULE: ./src/utilities/render.js
 
 
@@ -9259,8 +9278,11 @@ const creatorModal = function (status) {
   const containerApp = document.body;
   const fadeBlockElement = creator(fadeBlockParams);
   const modalElement = creator(modalParams);
+  modalElement.setAttribute("data-id", noteInfo.id);
   const headerModalElement = creator(headerModalParams);
   let inputTitle = null;
+  let textarea = null;
+  let checkbox = null;
   if (noteInfo.title) {
     const updateInputTitleParams = inputTitleParams;
     updateInputTitleParams.value = noteInfo.title;
@@ -9268,17 +9290,27 @@ const creatorModal = function (status) {
   } else {
     inputTitle = creator(inputTitleParams);
   }
-  const checkbox = creator(checkboxParams);
-  const textarea = creator(textareaParams);
+  if (noteInfo.textarea) {
+    const updateTextareaParams = textareaParams;
+    updateTextareaParams.value = noteInfo.textarea;
+    textarea = creator(updateTextareaParams);
+  } else {
+    textarea = creator(textareaParams);
+  }
+  if (noteInfo.checkbox) {
+    const updateCheckboxParams = checkboxParams;
+    updateCheckboxParams.attrParams.checked = noteInfo.checkbox;
+    checkbox = creator(updateCheckboxParams);
+  } else {
+    const regularParamsCheckbox = checkboxParams;
+    delete regularParamsCheckbox.attrParams.checked;
+    checkbox = creator(regularParamsCheckbox);
+  }
   let buttonAction = null;
   if (status) {
     buttonAction = creator(buttonEditParams);
-    console.log(status);
-    console.log(noteInfo);
   } else {
     buttonAction = creator(buttonAddParams);
-    console.log(status);
-    console.log(noteInfo);
   }
   const buttonCancel = creator(buttonCancelParams);
   const wrapperElement = creator(wrapperElementParams);
@@ -9296,6 +9328,9 @@ const creatorModal = function (status) {
   containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
   containerApp.insertAdjacentElement("beforeend", modalElement);
   inputTitle.focus();
+
+  // 1. Получить статус заметки и прописать условие для закрытия окна
+  // 1.1. Проверить изменены данные, или нет
   modalElement.addEventListener("submit", event => {
     event.preventDefault();
     formDataHandler(event, modalElement);
@@ -9315,6 +9350,8 @@ const creatorModal = function (status) {
   });
 };
 /* harmony default export */ const creator_modal = (creatorModal);
+// 1. Очистка старых данных из модалки
+// 2. Правка на калвишу enter
 ;// CONCATENATED MODULE: ./src/button-add-note/create-button-add-note.js
 
 

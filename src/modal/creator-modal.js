@@ -20,6 +20,7 @@ const creatorModal = (status, noteInfo = {}) => {
     const containerApp = document.body;
     const fadeBlockElement = createElement(fadeBlockParams);
     const modalElement = createElement(modalParams);
+    modalElement.setAttribute("data-id", noteInfo.id);
     const headerModalElement = createElement(headerModalParams);
     let inputTitle = null;
     let textarea = null;
@@ -42,8 +43,6 @@ const creatorModal = (status, noteInfo = {}) => {
     }
 
     if (noteInfo.checkbox) {
-        console.log(noteInfo.checkbox);
-
         const updateCheckboxParams = checkboxParams;
         updateCheckboxParams.attrParams.checked = noteInfo.checkbox;
         checkbox = createElement(updateCheckboxParams);

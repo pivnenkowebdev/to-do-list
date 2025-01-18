@@ -23,7 +23,6 @@ const setDate = () => {
 };
 
 const setId = (statusNote) => {
-    1;
     let newId = null;
     if (statusNote) {
         newId = data.favoritesNotes.length + "favorite";
@@ -36,20 +35,38 @@ const setId = (statusNote) => {
 const formDataHandler = (event, formElement) => {
     const formData = new FormData(formElement);
     const isFavorite = formData.get("checkbox");
+    const formId = formElement.dataset.id;
 
     const objectNote = {
         isChanged: false,
         title: formData.get("title"),
         textarea: formData.get("textarea"),
         checkbox: formData.get("checkbox"),
-        date: setDate(),
-        id: setId(isFavorite),
     };
+    const status = checkChange(objectNote, findNoteObject(formId));
+    console.log(status);
+    console.log(objectNote);
+    console.log(findNoteObject(formId));
+    console.log(formId);
 
-    isFavorite
-        ? data.favoritesNotes.push(objectNote)
-        : data.regularNotes.push(objectNote);
-    setDataToStorage(keyLocal, data);
+    if (status) {
+        // Окно должно не закрываться
+        alert("Внесите изменения");
+    } else {
+        removeNote(formId);
+        objectNote.date = setDate();
+        objectNote.id = setId(isFavorite);
+        isFavorite
+            ? data.favoritesNotes.push(objectNote)
+            : data.regularNotes.push(objectNote);
+        setDataToStorage(keyLocal, data);
+    }
+};
+
+const checkChange = (newNote, oldNote) => {
+    // console.log(newNote, oldNote);
+    const status = JSON.stringify(newNote) === JSON.stringify(oldNote);
+    return status;
 };
 
 const initData = () => {
@@ -87,19 +104,21 @@ const decreaseId = (index, array, mode) => {
 };
 
 const removeNote = (id) => {
-    const isFavoriteId = id.endsWith("favorite");
+    if (id) {
+        const isFavoriteId = id.endsWith("favorite");
 
-    const [currentArray, arrayMode] = isFavoriteId
-        ? [data.favoritesNotes, "favorite"]
-        : [data.regularNotes, "regular"];
+        const [currentArray, arrayMode] = isFavoriteId
+            ? [data.favoritesNotes, "favorite"]
+            : [data.regularNotes, "regular"];
 
-    const currentIndex = currentArray.findIndex((el) => el.id == id);
+        const currentIndex = currentArray.findIndex((el) => el.id == id);
 
-    currentArray.splice(currentIndex, 1);
+        currentArray.splice(currentIndex, 1);
 
-    decreaseId(currentIndex, currentArray, arrayMode);
+        decreaseId(currentIndex, currentArray, arrayMode);
 
-    setDataToStorage(keyLocal, data);
+        setDataToStorage(keyLocal, data);
+    }
 };
 
 const data = initData();

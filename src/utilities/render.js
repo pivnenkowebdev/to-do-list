@@ -21,6 +21,8 @@ const eventHandler = (e) => {
         render(data.regularNotes);
     } else if (isEditBtn) {
         const idFromNote = e.target.closest("[data-note-item]").id;
+        console.log(idFromNote);
+
         creatorModal(true, findNoteObject(idFromNote));
     }
 };
