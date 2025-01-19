@@ -34,39 +34,47 @@ const setId = (statusNote) => {
 
 const formDataHandler = (event, formElement) => {
     const formData = new FormData(formElement);
-    const isFavorite = formData.get("checkbox");
-    const formId = formElement.dataset.id;
 
-    const objectNote = {
+    const newNote = {
+        title: formData.get("title").trim() || "No title",
+        textarea: formData.get("textarea")?.trim() || "Empty",
+        checkbox: formData.get("checkbox") === "true",
+        id: "",
+        date: "",
         isChanged: false,
-        title: formData.get("title"),
-        textarea: formData.get("textarea"),
-        checkbox: formData.get("checkbox"),
     };
-    const status = checkChange(objectNote, findNoteObject(formId));
-    console.log(status);
-    console.log(objectNote);
-    console.log(findNoteObject(formId));
-    console.log(formId);
 
-    if (status) {
-        // Окно должно не закрываться
-        alert("Внесите изменения");
-    } else {
-        removeNote(formId);
-        objectNote.date = setDate();
-        objectNote.id = setId(isFavorite);
-        isFavorite
-            ? data.favoritesNotes.push(objectNote)
-            : data.regularNotes.push(objectNote);
-        setDataToStorage(keyLocal, data);
+    const formId = formElement.dataset.id;
+    if (formId) {
+        const oldNote = findNoteObject(formId);
+        console.log(oldNote);
+
+        if (oldNote) {
+            const titleChanged = oldNote.title !== newNote.title;
+            const textChanged = oldNote.textarea !== newNote.textarea;
+            const favoriteChanged = oldNote.checkbox !== newNote.checkbox;
+
+            if (titleChanged || textChanged || favoriteChanged) {
+                newNote.isChanged = true;
+                newNote.id = setId(newNote.isFavorite);
+                newNote.date = setDate();
+
+                removeNote(oldNote.id);
+            } else {
+                newNote.id = setId(newNote.isFavorite);
+                newNote.date = setDate();
+                alert("нет изменений");
+            }
+        }
     }
-};
 
-const checkChange = (newNote, oldNote) => {
-    // console.log(newNote, oldNote);
-    const status = JSON.stringify(newNote) === JSON.stringify(oldNote);
-    return status;
+    if (newNote.isFavorite) {
+        data.favoritesNotes.push(newNote);
+    } else {
+        data.regularNotes.push(newNote);
+    }
+
+    setDataToStorage(keyLocal, data);
 };
 
 const initData = () => {
@@ -86,15 +94,19 @@ const initData = () => {
 };
 
 const findNoteObject = (id) => {
-    const isFavoriteId = id.endsWith("favorite");
-    const currentArray = isFavoriteId ? data.favoritesNotes : data.regularNotes;
-    let currentNoteObject = null;
-    currentArray.forEach((element) => {
-        if (id === element.id) {
-            currentNoteObject = element;
-        }
-    });
-    return currentNoteObject;
+    if (id) {
+        const isFavoriteId = id.endsWith("favorite");
+        const currentArray = isFavoriteId
+            ? data.favoritesNotes
+            : data.regularNotes;
+        let currentNoteObject = null;
+        currentArray.forEach((element) => {
+            if (id === element.id) {
+                currentNoteObject = element;
+            }
+        });
+        return currentNoteObject;
+    }
 };
 
 const decreaseId = (index, array, mode) => {
@@ -124,5 +136,5 @@ const removeNote = (id) => {
 const data = initData();
 
 export { data, formDataHandler, removeNote, findNoteObject };
-// 1. Если данные в полях не изменены, заметку не отправлять
-// 1.1. Проверить что форма в состоянии изменения(кнопка edit/статусная переменная)
+
+// 1. если заметка не была измена, дату не менять и подписи к ней тоже
