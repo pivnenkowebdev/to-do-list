@@ -9060,34 +9060,41 @@ const setId = statusNote => {
 };
 const formDataHandler = (event, formElement) => {
   const formData = new FormData(formElement);
-  const isFavorite = formData.get("checkbox");
-  const formId = formElement.dataset.id;
-  const objectNote = {
-    isChanged: false,
-    title: formData.get("title"),
-    textarea: formData.get("textarea"),
-    checkbox: formData.get("checkbox")
+  // что-то с чекбоксом
+  const newNote = {
+    title: formData.get("title").trim() || "No title",
+    textarea: formData.get("textarea")?.trim() || "Empty",
+    checkbox: formData.get("checkbox"),
+    id: "",
+    date: "",
+    isChanged: false
   };
-  const status = checkChange(objectNote, findNoteObject(formId));
-  console.log(status);
-  console.log(objectNote);
-  console.log(findNoteObject(formId));
-  console.log(formId);
-  if (status) {
-    // Окно должно не закрываться
-    alert("Внесите изменения");
-  } else {
-    removeNote(formId);
-    objectNote.date = setDate();
-    objectNote.id = setId(isFavorite);
-    isFavorite ? data.favoritesNotes.push(objectNote) : data.regularNotes.push(objectNote);
-    setDataToStorage(keyLocal, data);
+  console.log(newNote);
+  const formId = formElement.dataset.id;
+  if (formId) {
+    const oldNote = findNoteObject(formId);
+    console.log(oldNote);
+    if (oldNote) {
+      const titleChanged = oldNote.title !== newNote.title;
+      const textChanged = oldNote.textarea !== newNote.textarea;
+      const favoriteChanged = oldNote.checkbox !== newNote.checkbox;
+      if (titleChanged || textChanged || favoriteChanged) {
+        newNote.isChanged = true;
+        removeNote(oldNote.id);
+      } else {
+        alert("нет изменений");
+      }
+    }
   }
-};
-const checkChange = (newNote, oldNote) => {
-  // console.log(newNote, oldNote);
-  const status = JSON.stringify(newNote) === JSON.stringify(oldNote);
-  return status;
+  newNote.id = setId(newNote.isFavorite);
+  newNote.date = setDate();
+  console.log(newNote);
+  if (newNote.isFavorite) {
+    data.favoritesNotes.push(newNote);
+  } else {
+    data.regularNotes.push(newNote);
+  }
+  setDataToStorage(keyLocal, data);
 };
 const initData = () => {
   const isData = getDataFromStorage(keyLocal);
@@ -9105,15 +9112,17 @@ const initData = () => {
   return data;
 };
 const findNoteObject = id => {
-  const isFavoriteId = id.endsWith("favorite");
-  const currentArray = isFavoriteId ? data.favoritesNotes : data.regularNotes;
-  let currentNoteObject = null;
-  currentArray.forEach(element => {
-    if (id === element.id) {
-      currentNoteObject = element;
-    }
-  });
-  return currentNoteObject;
+  if (id) {
+    const isFavoriteId = id.endsWith("favorite");
+    const currentArray = isFavoriteId ? data.favoritesNotes : data.regularNotes;
+    let currentNoteObject = null;
+    currentArray.forEach(element => {
+      if (id === element.id) {
+        currentNoteObject = element;
+      }
+    });
+    return currentNoteObject;
+  }
 };
 const decreaseId = (index, array, mode) => {
   for (let i = index; i < array.length; i++) {
@@ -9132,8 +9141,8 @@ const removeNote = id => {
 };
 const data = initData();
 
-// 1. Если данные в полях не изменены, заметку не отправлять
-// 1.1. Проверить что форма в состоянии изменения(кнопка edit/статусная переменная)
+
+// 1. если заметка не была измена, дату не менять и подписи к ней тоже
 ;// CONCATENATED MODULE: ./src/utilities/render.js
 
 
@@ -9153,9 +9162,13 @@ const eventHandler = e => {
     render(data.favoritesNotes);
     render(data.regularNotes);
   } else if (isEditBtn) {
+    // передача статуса в в модалку чтобы отображать нужную кнопку
+    // add или edit
+    const isEdit = true;
+
+    // поиск объекта старой заметки и передача его в модалку
     const idFromNote = e.target.closest("[data-note-item]").id;
-    console.log(idFromNote);
-    creator_modal(true, findNoteObject(idFromNote));
+    creator_modal(isEdit, findNoteObject(idFromNote));
   }
 };
 const render = arrNotes => {
@@ -9170,8 +9183,14 @@ const render = arrNotes => {
   arrNotes.forEach(note => {
     const template = document.createElement("li");
     template.className = "my-4 max-w-4xl mx-auto";
-    template.id = note.id;
+    if (note.id) {
+      template.id = note.id;
+    }
     template.setAttribute("data-note-item", "");
+
+    // изменение подписи к дате
+    const isChangeStatusString = note.isChanged ? "изменена" : "создана";
+    console.log(note.checkbox);
     const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
     const dateString = note.date.substring(0, 10);
     const timeString = note.date.substring(12, note.date.length);
@@ -9180,9 +9199,8 @@ const render = arrNotes => {
             <div class="flex justify-between pl-2">
                 <div class="flex">
                     <h2 class="text-2xl text-cyan-700 mr-4 font-semibold dark:text-cyan-500">${note.title}</h2>
-                    <p class="my-auto text-sm text-slate-500 font-semibold dark:text-white">Заметка создана ${dateString} в ${timeString}</p>
+                    <p class="my-auto text-sm text-slate-500 font-semibold dark:text-white">Заметка ${isChangeStatusString} ${dateString} в ${timeString}</p>
                 </div>
-                
                 <div class= "flex gap-2 pt-1 pr-2">
                     <button class="${iconClass} w-6 h-6 bg-cover bg-no-repeat "></button>
                     <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/edit-btn-dark.svg')]" data-btn-edit></button>
@@ -9279,7 +9297,9 @@ const creatorModal = function (status) {
   const containerApp = document.body;
   const fadeBlockElement = creator(fadeBlockParams);
   const modalElement = creator(modalParams);
-  modalElement.setAttribute("data-id", noteInfo.id);
+  if (noteInfo.id) {
+    modalElement.setAttribute("data-id", noteInfo.id);
+  }
   const headerModalElement = creator(headerModalParams);
   let inputTitle = null;
   let textarea = null;
@@ -9332,6 +9352,8 @@ const creatorModal = function (status) {
 
   // 1. Получить статус заметки и прописать условие для закрытия окна
   // 1.1. Проверить изменены данные, или нет
+
+  // в первый раз получаю пустую id из элемента формы
   modalElement.addEventListener("submit", event => {
     event.preventDefault();
     formDataHandler(event, modalElement);
@@ -9363,6 +9385,8 @@ const createbuttonAddNote = () => {
   buttonElement.insertAdjacentElement("beforeend", noteIconElement);
   const isEdit = false;
   buttonElement.addEventListener("click", () => {
+    // передача статуса в в модалку чтобы отображать нужную кнопку
+    // add или edit
     creator_modal(isEdit);
   });
   return buttonElement;
