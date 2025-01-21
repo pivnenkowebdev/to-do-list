@@ -34,7 +34,6 @@ const setId = (statusNote) => {
 
 const formDataHandler = (event, formElement) => {
     const formData = new FormData(formElement);
-    // что-то с чекбоксом
     const newNote = {
         title: formData.get("title").trim() || "No title",
         textarea: formData.get("textarea")?.trim() || "Empty",
