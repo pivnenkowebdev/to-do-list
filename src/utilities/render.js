@@ -49,6 +49,10 @@ const render = (arrNotes) => {
         }
         template.setAttribute("data-note-item", "");
 
+        // изменение подписи к дате
+        const isChangeStatusString = note.isChanged ? "изменена" : "создана";
+        console.log(note.checkbox);
+
         const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
         const dateString = note.date.substring(0, 10);
         const timeString = note.date.substring(12, note.date.length);
@@ -58,7 +62,7 @@ const render = (arrNotes) => {
             <div class="flex justify-between pl-2">
                 <div class="flex">
                     <h2 class="text-2xl text-cyan-700 mr-4 font-semibold dark:text-cyan-500">${note.title}</h2>
-                    <p class="my-auto text-sm text-slate-500 font-semibold dark:text-white">Заметка создана ${dateString} в ${timeString}</p>
+                    <p class="my-auto text-sm text-slate-500 font-semibold dark:text-white">Заметка ${isChangeStatusString} ${dateString} в ${timeString}</p>
                 </div>
                 <div class= "flex gap-2 pt-1 pr-2">
                     <button class="${iconClass} w-6 h-6 bg-cover bg-no-repeat "></button>

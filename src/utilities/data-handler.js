@@ -34,15 +34,15 @@ const setId = (statusNote) => {
 
 const formDataHandler = (event, formElement) => {
     const formData = new FormData(formElement);
-
     const newNote = {
         title: formData.get("title").trim() || "No title",
         textarea: formData.get("textarea")?.trim() || "Empty",
-        checkbox: formData.get("checkbox") === "true",
+        checkbox: formData.get("checkbox"),
         id: "",
         date: "",
         isChanged: false,
     };
+    console.log(newNote);
 
     const formId = formElement.dataset.id;
     if (formId) {
@@ -56,18 +56,16 @@ const formDataHandler = (event, formElement) => {
 
             if (titleChanged || textChanged || favoriteChanged) {
                 newNote.isChanged = true;
-                newNote.id = setId(newNote.isFavorite);
-                newNote.date = setDate();
-
                 removeNote(oldNote.id);
             } else {
-                newNote.id = setId(newNote.isFavorite);
-                newNote.date = setDate();
                 alert("нет изменений");
             }
         }
     }
 
+    newNote.id = setId(newNote.isFavorite);
+    newNote.date = setDate();
+    console.log(newNote);
     if (newNote.isFavorite) {
         data.favoritesNotes.push(newNote);
     } else {
