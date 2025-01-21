@@ -10,7 +10,13 @@ const createbuttonAddNote = () => {
     const noteIconElement = createElement(buttonAddNoteIconParams);
 
     buttonElement.insertAdjacentElement("beforeend", noteIconElement);
-    buttonElement.addEventListener("click", createModal);
+
+    const isEdit = false;
+    buttonElement.addEventListener("click", () => {
+        // передача статуса в в модалку чтобы отображать нужную кнопку
+        // add или edit
+        createModal(isEdit);
+    });
 
     return buttonElement;
 };

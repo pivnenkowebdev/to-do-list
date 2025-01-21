@@ -51,6 +51,7 @@ const inputTitleParams = {
         placeholder: "Title",
         name: "title",
     },
+    value: "",
 };
 
 const wrapperCheckboxParams = {
@@ -109,6 +110,20 @@ const buttonAddParams = {
     text: "Add",
 };
 
+const buttonEditParams = {
+    tagName: "button",
+    classList: [
+        "bg-cyan-600",
+        "rounded-lg",
+        "font-medium",
+        "text-white",
+        "px-4",
+        "py-2",
+        "min-w-[80px]",
+    ],
+    text: "Edit",
+};
+
 const buttonCancelParams = {
     tagName: "button",
     classList: [
@@ -135,4 +150,5 @@ export {
     buttonCancelParams,
     wrapperCheckboxParams,
     fakeCheckboxParams,
+    buttonEditParams,
 };

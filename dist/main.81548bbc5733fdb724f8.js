@@ -9011,6 +9011,9 @@ const createElement = elementParams => {
       tagElement.setAttribute(key, elementParams.attrParams[key]);
     }
   }
+  if (elementParams.value) {
+    tagElement.value = elementParams.value;
+  }
   return tagElement;
 };
 /* harmony default export */ const creator = (createElement);
@@ -9035,21 +9038,62 @@ const getDataFromStorage = key => {
   const data = JSON.parse(localStorage.getItem(key));
   return data;
 };
-
-// Функцию для получения даты написать здесь
-
+const setDate = () => {
+  const currentDate = new Date();
+  return currentDate.toLocaleString("ru-RU", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+};
+const setId = statusNote => {
+  let newId = null;
+  if (statusNote) {
+    newId = data.favoritesNotes.length + "favorite";
+  } else if (!statusNote) {
+    newId = data.regularNotes.length + "regular";
+  }
+  return newId;
+};
 const formDataHandler = (event, formElement) => {
-  event.preventDefault();
   const formData = new FormData(formElement);
-  const isFavorite = formData.get("checkbox");
-  const objectNote = {
-    title: formData.get("title"),
-    textarea: formData.get("textarea"),
-    checkbox: formData.get("checkbox")
-    // Создать свойсто хранения data
-    // Здесь нужно вызвать функцию
+  // что-то с чекбоксом
+  const newNote = {
+    title: formData.get("title").trim() || "No title",
+    textarea: formData.get("textarea")?.trim() || "Empty",
+    checkbox: formData.get("checkbox"),
+    id: "",
+    date: "",
+    isChanged: false
   };
-  isFavorite ? data.favoritesNotes.push(objectNote) : data.regularNotes.push(objectNote);
+  console.log(newNote);
+  const formId = formElement.dataset.id;
+  if (formId) {
+    const oldNote = findNoteObject(formId);
+    console.log(oldNote);
+    if (oldNote) {
+      const titleChanged = oldNote.title !== newNote.title;
+      const textChanged = oldNote.textarea !== newNote.textarea;
+      const favoriteChanged = oldNote.checkbox !== newNote.checkbox;
+      if (titleChanged || textChanged || favoriteChanged) {
+        newNote.isChanged = true;
+        removeNote(oldNote.id);
+      } else {
+        alert("нет изменений");
+      }
+    }
+  }
+  newNote.id = setId(newNote.isFavorite);
+  newNote.date = setDate();
+  console.log(newNote);
+  if (newNote.isFavorite) {
+    data.favoritesNotes.push(newNote);
+  } else {
+    data.regularNotes.push(newNote);
+  }
   setDataToStorage(keyLocal, data);
 };
 const initData = () => {
@@ -9067,12 +9111,40 @@ const initData = () => {
   }
   return data;
 };
+const findNoteObject = id => {
+  if (id) {
+    const isFavoriteId = id.endsWith("favorite");
+    const currentArray = isFavoriteId ? data.favoritesNotes : data.regularNotes;
+    let currentNoteObject = null;
+    currentArray.forEach(element => {
+      if (id === element.id) {
+        currentNoteObject = element;
+      }
+    });
+    return currentNoteObject;
+  }
+};
+const decreaseId = (index, array, mode) => {
+  for (let i = index; i < array.length; i++) {
+    array[i].id = parseInt(array[i].id) - 1 + mode;
+  }
+};
+const removeNote = id => {
+  if (id) {
+    const isFavoriteId = id.endsWith("favorite");
+    const [currentArray, arrayMode] = isFavoriteId ? [data.favoritesNotes, "favorite"] : [data.regularNotes, "regular"];
+    const currentIndex = currentArray.findIndex(el => el.id == id);
+    currentArray.splice(currentIndex, 1);
+    decreaseId(currentIndex, currentArray, arrayMode);
+    setDataToStorage(keyLocal, data);
+  }
+};
 const data = initData();
 
+
+// 1. если заметка не была измена, дату не менять и подписи к ней тоже
 ;// CONCATENATED MODULE: ./src/utilities/render.js
-// 1. Добавить data в обьект заметок
-// 2. Отображать data в рендере
-// 3. HTML template element
+
 
 const clearRender = () => {
   const isList = document.querySelector("#list");
@@ -9080,39 +9152,68 @@ const clearRender = () => {
     isList.innerHTML = "";
   }
 };
+const eventHandler = e => {
+  const isTrashButton = e.target.closest("[data-btn-remove]");
+  const isEditBtn = e.target.closest("[data-btn-edit]");
+  if (isTrashButton) {
+    const idFromNote = e.target.closest("[data-note-item]").id;
+    removeNote(idFromNote);
+    clearRender();
+    render(data.favoritesNotes);
+    render(data.regularNotes);
+  } else if (isEditBtn) {
+    // передача статуса в в модалку чтобы отображать нужную кнопку
+    // add или edit
+    const isEdit = true;
+
+    // поиск объекта старой заметки и передача его в модалку
+    const idFromNote = e.target.closest("[data-note-item]").id;
+    creator_modal(isEdit, findNoteObject(idFromNote));
+  }
+};
 const render = arrNotes => {
   let isList = document.querySelector("#list");
   if (!isList) {
     isList = document.createElement("ul");
     isList.id = "list";
+    isList.addEventListener("click", e => eventHandler(e));
     document.body.append(isList);
   }
   const listWrapper = document.createDocumentFragment();
-  const template = document.createElement("li");
-  template.className = "my-4 max-w-4xl mx-auto";
   arrNotes.forEach(note => {
+    const template = document.createElement("li");
+    template.className = "my-4 max-w-4xl mx-auto";
+    if (note.id) {
+      template.id = note.id;
+    }
+    template.setAttribute("data-note-item", "");
+
+    // изменение подписи к дате
+    const isChangeStatusString = note.isChanged ? "изменена" : "создана";
+    console.log(note.checkbox);
     const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
+    const dateString = note.date.substring(0, 10);
+    const timeString = note.date.substring(12, note.date.length);
     const noteElement = `
-        <article class="border-2 border-cyan-600 rounded-md">
+        <article class="border-2 border-cyan-600 rounded-md dark:border-white">
             <div class="flex justify-between pl-2">
                 <div class="flex">
-                    <h2 class="text-2xl text-cyan-700 mr-4 font-semibold">${note.title}</h2>
-                    <p class="my-auto text-sm text-slate-500 font-semibold">Заметка создана 08.06.24 в 18:46</p>
+                    <h2 class="text-2xl text-cyan-700 mr-4 font-semibold dark:text-cyan-500">${note.title}</h2>
+                    <p class="my-auto text-sm text-slate-500 font-semibold dark:text-white">Заметка ${isChangeStatusString} ${dateString} в ${timeString}</p>
                 </div>
-                
                 <div class= "flex gap-2 pt-1 pr-2">
                     <button class="${iconClass} w-6 h-6 bg-cover bg-no-repeat "></button>
-                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat"></button>
-                    <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat"></button>
+                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/edit-btn-dark.svg')]" data-btn-edit></button>
+                    <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/trash-btn-dark.svg')]" data-btn-remove></button>
                 </div>
             </div>
 
-            <p class="pl-2">${note.textarea}</p>
+            <p class="pl-2 dark:text-white mb-1">${note.textarea}</p>
         </article>
         `;
     template.innerHTML = noteElement;
+    listWrapper.appendChild(template);
   });
-  listWrapper.appendChild(template);
   isList.appendChild(listWrapper);
 };
 
@@ -9139,7 +9240,8 @@ const inputTitleParams = {
     type: "text",
     placeholder: "Title",
     name: "title"
-  }
+  },
+  value: ""
 };
 const wrapperCheckboxParams = {
   tagName: "label",
@@ -9174,6 +9276,11 @@ const buttonAddParams = {
   classList: ["bg-cyan-600", "rounded-lg", "font-medium", "text-white", "px-4", "py-2", "min-w-[80px]"],
   text: "Add"
 };
+const buttonEditParams = {
+  tagName: "button",
+  classList: ["bg-cyan-600", "rounded-lg", "font-medium", "text-white", "px-4", "py-2", "min-w-[80px]"],
+  text: "Edit"
+};
 const buttonCancelParams = {
   tagName: "button",
   classList: ["bg-red-800", "rounded-lg", "font-medium", "text-white", "px-4", "py-2", "min-w-[80px]"],
@@ -9185,15 +9292,47 @@ const buttonCancelParams = {
 
 
 
-const creatorModal = () => {
+const creatorModal = function (status) {
+  let noteInfo = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   const containerApp = document.body;
   const fadeBlockElement = creator(fadeBlockParams);
   const modalElement = creator(modalParams);
+  if (noteInfo.id) {
+    modalElement.setAttribute("data-id", noteInfo.id);
+  }
   const headerModalElement = creator(headerModalParams);
-  const inputTitle = creator(inputTitleParams);
-  const checkbox = creator(checkboxParams);
-  const textarea = creator(textareaParams);
-  const buttonAdd = creator(buttonAddParams);
+  let inputTitle = null;
+  let textarea = null;
+  let checkbox = null;
+  if (noteInfo.title) {
+    const updateInputTitleParams = inputTitleParams;
+    updateInputTitleParams.value = noteInfo.title;
+    inputTitle = creator(updateInputTitleParams);
+  } else {
+    inputTitle = creator(inputTitleParams);
+  }
+  if (noteInfo.textarea) {
+    const updateTextareaParams = textareaParams;
+    updateTextareaParams.value = noteInfo.textarea;
+    textarea = creator(updateTextareaParams);
+  } else {
+    textarea = creator(textareaParams);
+  }
+  if (noteInfo.checkbox) {
+    const updateCheckboxParams = checkboxParams;
+    updateCheckboxParams.attrParams.checked = noteInfo.checkbox;
+    checkbox = creator(updateCheckboxParams);
+  } else {
+    const regularParamsCheckbox = checkboxParams;
+    delete regularParamsCheckbox.attrParams.checked;
+    checkbox = creator(regularParamsCheckbox);
+  }
+  let buttonAction = null;
+  if (status) {
+    buttonAction = creator(buttonEditParams);
+  } else {
+    buttonAction = creator(buttonAddParams);
+  }
   const buttonCancel = creator(buttonCancelParams);
   const wrapperElement = creator(wrapperElementParams);
   const wrapperCheckbox = creator(wrapperCheckboxParams);
@@ -9202,14 +9341,21 @@ const creatorModal = () => {
   modalElement.insertAdjacentElement("beforeend", textarea);
   modalElement.insertAdjacentElement("beforeend", wrapperElement);
   wrapperElement.insertAdjacentElement("beforeend", buttonCancel);
-  wrapperElement.insertAdjacentElement("beforeend", buttonAdd);
+  wrapperElement.insertAdjacentElement("beforeend", buttonAction);
   headerModalElement.insertAdjacentElement("beforeend", inputTitle);
   headerModalElement.insertAdjacentElement("beforeend", wrapperCheckbox);
   wrapperCheckbox.insertAdjacentElement("beforeend", checkbox);
   wrapperCheckbox.insertAdjacentElement("beforeend", fakeCheckbox);
   containerApp.insertAdjacentElement("beforeend", fadeBlockElement);
   containerApp.insertAdjacentElement("beforeend", modalElement);
+  inputTitle.focus();
+
+  // 1. Получить статус заметки и прописать условие для закрытия окна
+  // 1.1. Проверить изменены данные, или нет
+
+  // в первый раз получаю пустую id из элемента формы
   modalElement.addEventListener("submit", event => {
+    event.preventDefault();
     formDataHandler(event, modalElement);
     clearRender();
     render(data.favoritesNotes);
@@ -9227,6 +9373,8 @@ const creatorModal = () => {
   });
 };
 /* harmony default export */ const creator_modal = (creatorModal);
+// 1. Очистка старых данных из модалки
+// 2. Правка на калвишу enter
 ;// CONCATENATED MODULE: ./src/button-add-note/create-button-add-note.js
 
 
@@ -9235,7 +9383,12 @@ const createbuttonAddNote = () => {
   const buttonElement = creator(buttonAddNoteParams);
   const noteIconElement = creator(buttonAddNoteIconParams);
   buttonElement.insertAdjacentElement("beforeend", noteIconElement);
-  buttonElement.addEventListener("click", creator_modal);
+  const isEdit = false;
+  buttonElement.addEventListener("click", () => {
+    // передача статуса в в модалку чтобы отображать нужную кнопку
+    // add или edit
+    creator_modal(isEdit);
+  });
   return buttonElement;
 };
 /* harmony default export */ const create_button_add_note = (createbuttonAddNote);
@@ -9288,12 +9441,17 @@ const createHeader = () => {
 ;// CONCATENATED MODULE: ./src/utilities/init.js
 
 
+
+
 const initApp = () => {
   const containerApp = document.body;
   const header = header_view();
   containerApp.insertAdjacentElement("beforeend", header);
   const buttonAddNote = create_button_add_note();
   containerApp.insertAdjacentElement("beforeend", buttonAddNote);
+  clearRender();
+  render(data.favoritesNotes);
+  render(data.regularNotes);
 };
 /* harmony default export */ const init = (initApp);
 ;// CONCATENATED MODULE: ./src/index.js

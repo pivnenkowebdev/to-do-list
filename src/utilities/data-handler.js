@@ -22,21 +22,57 @@ const setDate = () => {
     });
 };
 
+const setId = (statusNote) => {
+    let newId = null;
+    if (statusNote) {
+        newId = data.favoritesNotes.length + "favorite";
+    } else if (!statusNote) {
+        newId = data.regularNotes.length + "regular";
+    }
+    return newId;
+};
+
 const formDataHandler = (event, formElement) => {
-    event.preventDefault();
     const formData = new FormData(formElement);
-    const isFavorite = formData.get("checkbox");
-
-    const objectNote = {
-        title: formData.get("title"),
-        textarea: formData.get("textarea"),
+    // что-то с чекбоксом
+    const newNote = {
+        title: formData.get("title").trim() || "No title",
+        textarea: formData.get("textarea")?.trim() || "Empty",
         checkbox: formData.get("checkbox"),
-        date: setDate(),
+        id: "",
+        date: "",
+        isChanged: false,
     };
+    console.log(newNote);
 
-    isFavorite
-        ? data.favoritesNotes.push(objectNote)
-        : data.regularNotes.push(objectNote);
+    const formId = formElement.dataset.id;
+    if (formId) {
+        const oldNote = findNoteObject(formId);
+        console.log(oldNote);
+
+        if (oldNote) {
+            const titleChanged = oldNote.title !== newNote.title;
+            const textChanged = oldNote.textarea !== newNote.textarea;
+            const favoriteChanged = oldNote.checkbox !== newNote.checkbox;
+
+            if (titleChanged || textChanged || favoriteChanged) {
+                newNote.isChanged = true;
+                removeNote(oldNote.id);
+            } else {
+                alert("нет изменений");
+            }
+        }
+    }
+
+    newNote.id = setId(newNote.isFavorite);
+    newNote.date = setDate();
+    console.log(newNote);
+    if (newNote.isFavorite) {
+        data.favoritesNotes.push(newNote);
+    } else {
+        data.regularNotes.push(newNote);
+    }
+
     setDataToStorage(keyLocal, data);
 };
 
@@ -56,6 +92,48 @@ const initData = () => {
     return data;
 };
 
+const findNoteObject = (id) => {
+    if (id) {
+        const isFavoriteId = id.endsWith("favorite");
+        const currentArray = isFavoriteId
+            ? data.favoritesNotes
+            : data.regularNotes;
+        let currentNoteObject = null;
+        currentArray.forEach((element) => {
+            if (id === element.id) {
+                currentNoteObject = element;
+            }
+        });
+        return currentNoteObject;
+    }
+};
+
+const decreaseId = (index, array, mode) => {
+    for (let i = index; i < array.length; i++) {
+        array[i].id = parseInt(array[i].id) - 1 + mode;
+    }
+};
+
+const removeNote = (id) => {
+    if (id) {
+        const isFavoriteId = id.endsWith("favorite");
+
+        const [currentArray, arrayMode] = isFavoriteId
+            ? [data.favoritesNotes, "favorite"]
+            : [data.regularNotes, "regular"];
+
+        const currentIndex = currentArray.findIndex((el) => el.id == id);
+
+        currentArray.splice(currentIndex, 1);
+
+        decreaseId(currentIndex, currentArray, arrayMode);
+
+        setDataToStorage(keyLocal, data);
+    }
+};
+
 const data = initData();
 
-export { data, formDataHandler };
+export { data, formDataHandler, removeNote, findNoteObject };
+
+// 1. если заметка не была измена, дату не менять и подписи к ней тоже
