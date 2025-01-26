@@ -35,8 +35,8 @@ const setId = (statusNote) => {
 const formDataHandler = (event, formElement) => {
     const formData = new FormData(formElement);
     const newNote = {
-        title: formData.get("title").trim() || "No title",
-        textarea: formData.get("textarea")?.trim() || "Empty",
+        title: formData.get("title").trim(),
+        textarea: formData.get("textarea")?.trim(),
         checkbox: formData.get("checkbox"),
         id: "",
         date: "",
@@ -47,7 +47,6 @@ const formDataHandler = (event, formElement) => {
     const formId = formElement.dataset.id;
     if (formId) {
         const oldNote = findNoteObject(formId);
-        console.log(oldNote);
 
         if (oldNote) {
             const titleChanged = oldNote.title !== newNote.title;
@@ -56,17 +55,19 @@ const formDataHandler = (event, formElement) => {
 
             if (titleChanged || textChanged || favoriteChanged) {
                 newNote.isChanged = true;
-                removeNote(oldNote.id);
-            } else {
-                // Если заметка не изменена, не менять id и date
-                alert("нет изменений");
+                // Пересмотреть
+                newNote.date = setDate();
             }
+            removeNote(oldNote.id);
         }
     }
 
     newNote.id = setId(newNote.isFavorite);
-    newNote.date = setDate();
-    console.log(newNote);
+    // Пересмотреть
+    if (!formId) {
+        newNote.date = setDate();
+    }
+
     if (newNote.isFavorite) {
         data.favoritesNotes.push(newNote);
     } else {
