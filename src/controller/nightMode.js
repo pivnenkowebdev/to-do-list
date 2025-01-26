@@ -1,5 +1,3 @@
-// import { containerApp } from "../utilities/init";
-
 const containerApp = document.body;
 const bodyClassList = ["dark", "bg-gray-900"];
 

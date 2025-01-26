@@ -58,6 +58,7 @@ const formDataHandler = (event, formElement) => {
                 newNote.isChanged = true;
                 removeNote(oldNote.id);
             } else {
+                // Если заметка не изменена, не менять id и date
                 alert("нет изменений");
             }
         }

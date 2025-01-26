@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap");
-
 body {
     background-color: rgba(226, 232, 240, 0.9);
 }
@@ -12,7 +10,7 @@ textarea::-webkit-resizer {
     width: 40px;
     height: 40px;
     display: block;
-    background: url(../img/ugol.svg) no-repeat center;
+    background: url(/ugol.svg) no-repeat center;
     background-size: cover;
 }
 
@@ -27,23 +25,23 @@ textarea::-webkit-resizer {
 .custom-checkbox {
     width: 24px;
     height: 24px;
-    background-image: url(../img/star-btn.svg);
+    background-image: url(/star-btn.svg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
 }
 
 .real-checkbox:checked + .custom-checkbox {
-    background-image: url(../img/star-gold.svg);
+    background-image: url(/star-gold.svg);
 }
 
 .icon-star-gold {
-    background-image: url("../img/star-gold.svg");
+    background-image: url("/star-gold.svg");
 }
 .icon-star-btn {
-    background-image: url("../img/star-btn.svg");
+    background-image: url("/star-btn.svg");
 }
 
 body.dark .icon-star-btn {
-    background-image: url("../img/star-btn-dark.svg");
+    background-image: url("/star-btn-dark.svg");
 }

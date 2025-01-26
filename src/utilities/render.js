@@ -51,7 +51,7 @@ const render = (arrNotes) => {
 
         // изменение подписи к дате
         const isChangeStatusString = note.isChanged ? "изменена" : "создана";
-        console.log(note.checkbox);
+        // console.log(note.checkbox);
 
         const iconClass = note.checkbox ? "icon-star-gold" : "icon-star-btn";
         const dateString = note.date.substring(0, 10);
@@ -66,8 +66,8 @@ const render = (arrNotes) => {
                 </div>
                 <div class= "flex gap-2 pt-1 pr-2">
                     <button class="${iconClass} w-6 h-6 bg-cover bg-no-repeat "></button>
-                    <button class="bg-[url('../img/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/edit-btn-dark.svg')]" data-btn-edit></button>
-                    <button class="bg-[url('../img/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('../img/trash-btn-dark.svg')]" data-btn-remove></button>
+                    <button class="bg-[url('/edit-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('/edit-btn-dark.svg')]" data-btn-edit></button>
+                    <button class="bg-[url('/trash-btn.svg')] w-6 h-6 bg-cover bg-no-repeat dark:bg-[url('/trash-btn-dark.svg')]" data-btn-remove></button>
                 </div>
             </div>
 
